@@ -30,7 +30,8 @@ public class OrderRepository {
     public OrderDto update(OrderDto orderDto) {
         List<Integer> oldItems = collector.get(orderDto.getId()).getItems();
         orderDto.setItems(Optional.ofNullable(orderDto.getItems()).orElse(oldItems));
-        return collector.put(orderDto.getId(), orderDto);
+        collector.put(orderDto.getId(), orderDto);
+        return collector.get(orderDto.getId());
     }
 
     public List<Integer> getItems(int id) {

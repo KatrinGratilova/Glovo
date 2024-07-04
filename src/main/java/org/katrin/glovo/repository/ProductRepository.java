@@ -24,7 +24,8 @@ public class ProductRepository {
     }
 
     public ProductDto update(ProductDto productDto) {
-        return collector.put(productDto.getId(), productDto);
+        collector.put(productDto.getId(), productDto);
+        return collector.get(productDto.getId());
     }
 
     public void delete(int id) {

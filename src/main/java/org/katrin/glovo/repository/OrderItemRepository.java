@@ -27,7 +27,8 @@ public class OrderItemRepository {
     }
 
     public OrderItemDto update(OrderItemDto orderItemDto) {
-        return collector.put(orderItemDto.getId(), orderItemDto);
+        collector.put(orderItemDto.getId(), orderItemDto);
+        return collector.get(orderItemDto.getId());
     }
 
     public void delete(int orderItemId) {
