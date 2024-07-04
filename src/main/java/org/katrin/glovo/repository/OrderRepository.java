@@ -46,7 +46,7 @@ public class OrderRepository {
 
     public OrderDto removeItem(int orderId, int orderItemId) {
         orderItemRepository.delete(orderItemId);
-        collector.get(orderId).getItems().remove(orderItemId);
+        collector.get(orderId).getItems().remove((Integer) orderItemId);
         return collector.get(orderId);
     }
 
