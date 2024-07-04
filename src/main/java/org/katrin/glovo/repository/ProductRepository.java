@@ -27,7 +27,7 @@ public class ProductRepository {
         return collector.put(productDto.getId(), productDto);
     }
 
-    public void deleteById(int id) {
+    public void delete(int id) {
         collector.remove(id);
     }
 }

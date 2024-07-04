@@ -36,11 +36,6 @@ public class OrderController {
         return orderService.update(orderDto);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable int id) {
-        orderService.deleteById(id);
-    }
-
     @GetMapping("/{id}/items")
     public Collection<Integer> getItems(@PathVariable int id) {
         return orderService.getItems(id);
@@ -52,7 +47,12 @@ public class OrderController {
     }
 
     @DeleteMapping("/{orderId}/items/{orderItemId}")
-    public OrderDto deleteItem(@PathVariable int orderId, @PathVariable int orderItemId) {
-        return orderService.deleteItem(orderId, orderItemId);
+    public OrderDto removeItem(@PathVariable int orderId, @PathVariable int orderItemId) {
+        return orderService.removeItem(orderId, orderItemId);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) {
+        orderService.delete(id);
     }
 }

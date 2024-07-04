@@ -49,7 +49,7 @@ public class OrderRepository {
         return collector.get(orderId);
     }
 
-    public void deleteById(int id) {
+    public void delete(int id) {
         collector.remove(id);
     }
 }

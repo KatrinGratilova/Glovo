@@ -31,10 +31,6 @@ public class OrderService {
         return orderRepository.update(order);
     }
 
-    public void deleteById(int id) {
-        orderRepository.deleteById(id);
-    }
-
     public List<Integer> getItems(int id) {
         return orderRepository.getItems(id);
     }
@@ -43,7 +39,11 @@ public class OrderService {
         return orderRepository.addItem(orderId, orderItemDto);
     }
 
-    public OrderDto deleteItem(int orderId, int orderItemId) {
+    public OrderDto removeItem(int orderId, int orderItemId) {
         return orderRepository.removeItem(orderId, orderItemId);
+    }
+
+    public void delete(int id) {
+        orderRepository.delete(id);
     }
 }
