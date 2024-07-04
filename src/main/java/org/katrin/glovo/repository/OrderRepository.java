@@ -22,13 +22,15 @@ public class OrderRepository {
         return collector.get(id);
     }
 
-    public OrderDto save(OrderDto order) {
-        order.setItems(new ArrayList<>());
-        return collector.put(order.getId(), order);
+    public OrderDto save(OrderDto orderDto) {
+        orderDto.setItems(new ArrayList<>());
+        return collector.put(orderDto.getId(), orderDto);
     }
 
-    public OrderDto update(OrderDto order) {
-        return collector.put(order.getId(), order);
+    public OrderDto update(OrderDto orderDto) {
+        List<Integer> oldItems = collector.get(orderDto.getId()).getItems();
+        orderDto.setItems(Optional.ofNullable(orderDto.getItems()).orElse(oldItems));
+        return collector.put(orderDto.getId(), orderDto);
     }
 
     public List<Integer> getItems(int id) {

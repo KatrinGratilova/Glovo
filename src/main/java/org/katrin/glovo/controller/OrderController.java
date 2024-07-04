@@ -1,6 +1,5 @@
 package org.katrin.glovo.controller;
 
-
 import lombok.AllArgsConstructor;
 import org.katrin.glovo.dto.OrderDto;
 import org.katrin.glovo.dto.OrderItemDto;
@@ -52,8 +51,8 @@ public class OrderController {
         return orderService.addItem(orderId, orderItemDto);
     }
 
-    @PatchMapping("/{orderId}/items/{orderItemId}")
-    public OrderDto addItem(@PathVariable int orderId, @PathVariable int orderItemId) {
+    @DeleteMapping("/{orderId}/items/{orderItemId}")
+    public OrderDto deleteItem(@PathVariable int orderId, @PathVariable int orderItemId) {
         return orderService.deleteItem(orderId, orderItemId);
     }
 }
