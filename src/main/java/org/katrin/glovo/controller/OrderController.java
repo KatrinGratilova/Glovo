@@ -41,7 +41,7 @@ public class OrderController {
         return orderService.getItems(id);
     }
 
-    @PatchMapping("/{orderId}/items")
+    @PostMapping("/{orderId}/items")
     public OrderDto addItem(@PathVariable int orderId, @RequestBody OrderItemDto orderItemDto) {
         return orderService.addItem(orderId, orderItemDto);
     }
