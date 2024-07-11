@@ -24,6 +24,11 @@ public class OrderItemController {
         return orderItemService.getAll();
     }
 
+    @GetMapping("/{id}/items")
+    public Collection<OrderItemDto> getItems(@PathVariable int id) {
+        return orderItemService.getByOrderId(id);
+    }
+
     @PutMapping("/{id}")
     public OrderItemDto update(@PathVariable int id, @RequestBody OrderItemDto orderItemDto) {
         orderItemDto.setId(id);

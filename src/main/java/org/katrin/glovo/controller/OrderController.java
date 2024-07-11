@@ -36,19 +36,9 @@ public class OrderController {
         return orderService.update(orderDto);
     }
 
-    @GetMapping("/{id}/items")
-    public Collection<Integer> getItems(@PathVariable int id) {
-        return orderService.getItems(id);
-    }
-
     @PostMapping("/{orderId}/items")
     public OrderDto addItem(@PathVariable int orderId, @RequestBody OrderItemDto orderItemDto) {
         return orderService.addItem(orderId, orderItemDto);
-    }
-
-    @DeleteMapping("/{orderId}/items/{orderItemId}")
-    public OrderDto removeItem(@PathVariable int orderId, @PathVariable int orderItemId) {
-        return orderService.removeItem(orderId, orderItemId);
     }
 
     @DeleteMapping("/{id}")

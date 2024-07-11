@@ -1,13 +1,15 @@
 package org.katrin.glovo.service;
 
 import lombok.AllArgsConstructor;
+import org.katrin.glovo.converter.OrderConverter;
+import org.katrin.glovo.converter.OrderItemConverter;
 import org.katrin.glovo.dto.OrderDto;
 import org.katrin.glovo.dto.OrderItemDto;
+import org.katrin.glovo.entity.OrderEntity;
 import org.katrin.glovo.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
 
 @AllArgsConstructor
 
@@ -16,34 +18,29 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     public Collection<OrderDto> getAll() {
-        return orderRepository.getAll();
+        return orderRepository.findAll().stream().map(OrderConverter::toDto).toList();
     }
 
     public OrderDto getById(int id) {
-        return orderRepository.getById(id);
+        return orderRepository.findById(id).map(OrderConverter::toDto).orElseThrow();
     }
 
-    public OrderDto save(OrderDto order) {
-        return orderRepository.save(order);
+    public OrderDto save(OrderDto orderDto) {
+        OrderEntity orderEntity = orderRepository.save(OrderConverter.toEntity(orderDto));
+        return OrderConverter.toDto(orderEntity);
     }
 
-    public OrderDto update(OrderDto order) {
-        return orderRepository.update(order);
-    }
-
-    public List<Integer> getItems(int id) {
-        return orderRepository.getItems(id);
+    public OrderDto update(OrderDto orderDto) {
+        OrderEntity orderEntity = orderRepository.save(OrderConverter.toEntity(orderDto));
+        return OrderConverter.toDto(orderEntity);
     }
 
     public OrderDto addItem(int orderId, OrderItemDto orderItemDto) {
-        return orderRepository.addItem(orderId, orderItemDto);
-    }
-
-    public OrderDto removeItem(int orderId, int orderItemId) {
-        return orderRepository.removeItem(orderId, orderItemId);
+        OrderEntity orderEntity = orderRepository.addItem(orderId, OrderItemConverter.toEntity(orderItemDto));
+        return OrderConverter.toDto(orderEntity);
     }
 
     public void delete(int id) {
-        orderRepository.delete(id);
+        orderRepository.deleteById(id);
     }
 }

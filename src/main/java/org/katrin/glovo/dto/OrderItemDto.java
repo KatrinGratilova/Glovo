@@ -12,4 +12,5 @@ public class OrderItemDto {
     private double price;
     private int quantity;
     private int productId;
+    private int orderId;
 }
