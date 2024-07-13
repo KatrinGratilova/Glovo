@@ -14,7 +14,7 @@ import org.hibernate.annotations.ColumnDefault;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "product")
+@Table(name = "product", schema = "public")
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

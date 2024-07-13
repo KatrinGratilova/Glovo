@@ -12,7 +12,10 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.katrin.glovo.dto.OrderStatus;
 
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -21,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "order")
+@Table(name = "order", schema = "public")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,13 +38,12 @@ public class OrderEntity {
     @Column(columnDefinition = "IN_PROCESSING")
     private OrderStatus status;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @Column(name = "checkout_date", nullable = false)
     @ColumnDefault("CURRENT_DATE")
-    @CreationTimestamp
-    private LocalDate checkoutDate;
+    private LocalDateTime checkoutDate;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "order_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
+    @PrimaryKeyJoinColumn(name = "order_id")
     private List<OrderItemEntity> items;
 }

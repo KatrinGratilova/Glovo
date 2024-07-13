@@ -13,19 +13,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "order_item")
+@Table(name = "order_item", schema = "public")
 public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_item_id", nullable = false)
     private int id;
 
-    @Column(name = "order_id", nullable = false)
-    @ManyToOne(cascade = CascadeType.REFRESH)
+    //@Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity order;
 
-    @Column(name = "product_id", nullable = false)
+    //@Column(nullable = false)
     @OneToOne(cascade = CascadeType.REFRESH)
+    @PrimaryKeyJoinColumn(name = "product_id")
     private ProductEntity product;
 
     @Column(nullable = false)

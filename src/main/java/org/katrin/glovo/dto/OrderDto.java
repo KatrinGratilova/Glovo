@@ -6,7 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -20,8 +23,8 @@ public class OrderDto {
     @JsonProperty("status")
     private OrderStatus status;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate checkoutDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime checkoutDate;
 
     private List<Integer> items;
 }
