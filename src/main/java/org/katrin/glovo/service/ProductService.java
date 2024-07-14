@@ -7,7 +7,7 @@ import org.katrin.glovo.entity.ProductEntity;
 import org.katrin.glovo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 
@@ -15,7 +15,7 @@ import java.util.Collection;
 public class ProductService {
     private ProductRepository productRepository;
 
-    public Collection<ProductDto> getAll() {
+    public List<ProductDto> getAll() {
         return productRepository.findAll().stream().map(ProductConverter::toDto).toList();
     }
 

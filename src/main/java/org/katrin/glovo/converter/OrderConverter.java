@@ -4,6 +4,8 @@ import org.katrin.glovo.dto.OrderDto;
 import org.katrin.glovo.entity.OrderEntity;
 import org.katrin.glovo.entity.OrderItemEntity;
 
+import java.util.ArrayList;
+
 public class OrderConverter {
     public static OrderDto toDto(OrderEntity orderEntity) {
         return OrderDto.builder()
@@ -21,6 +23,7 @@ public class OrderConverter {
                 .customerName(orderDto.getCustomerName())
                 .status(orderDto.getStatus())
                 .checkoutDate(orderDto.getCheckoutDate())
+                .items(new ArrayList<>())
                 .build();
     }
 }

@@ -20,11 +20,11 @@ public class OrderItemEntity {
     @Column(name = "order_item_id", nullable = false)
     private int id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity order;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
 

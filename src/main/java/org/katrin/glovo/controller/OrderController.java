@@ -3,10 +3,11 @@ package org.katrin.glovo.controller;
 import lombok.AllArgsConstructor;
 import org.katrin.glovo.dto.OrderDto;
 import org.katrin.glovo.dto.OrderItemDto;
+import org.katrin.glovo.service.OrderItemService;
 import org.katrin.glovo.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 
@@ -14,9 +15,10 @@ import java.util.Collection;
 @RequestMapping("/orders")
 public class OrderController {
     private OrderService orderService;
+    private OrderItemService orderItemService;
 
     @GetMapping()
-    public Collection<OrderDto> getAll() {
+    public List<OrderDto> getAll() {
         return orderService.getAll();
     }
 
@@ -36,9 +38,14 @@ public class OrderController {
         return orderService.update(orderDto);
     }
 
-    @PostMapping("/{orderId}/items")
-    public OrderDto addItem(@PathVariable int orderId, @RequestBody OrderItemDto orderItemDto) {
-        return orderService.addItem(orderId, orderItemDto);
+    @GetMapping("/{id}/items")
+    public List<OrderItemDto> getItems(@PathVariable int id) {
+        return orderItemService.findByOrderId(id); //TODO: impossible lol
+    }
+
+    @PostMapping("/{id}/items")
+    public OrderDto addItem(@PathVariable int id, @RequestBody OrderItemDto orderItemDto) {
+        return orderService.addItem(id, orderItemDto);
     }
 
     @DeleteMapping("/{id}")

@@ -31,6 +31,6 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
         entityManager.merge(orderEntity);
 
-        return orderEntity;
+        return entityManager.find(OrderEntity.class,orderEntity.getId());
     }
 }

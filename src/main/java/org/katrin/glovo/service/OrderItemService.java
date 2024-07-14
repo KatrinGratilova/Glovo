@@ -7,7 +7,7 @@ import org.katrin.glovo.entity.OrderItemEntity;
 import org.katrin.glovo.repository.OrderItemRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 
@@ -19,11 +19,11 @@ public class OrderItemService {
         return orderItemRepository.findById(id).map(OrderItemConverter::toDto).orElseThrow();
     }
 
-    public Collection<OrderItemDto> getAll() {
+    public List<OrderItemDto> getAll() {
         return orderItemRepository.findAll().stream().map(OrderItemConverter::toDto).toList();
     }
 
-    public Collection<OrderItemDto> getByOrderId(int orderId) {
+    public List<OrderItemDto> findByOrderId(int orderId) {
         return orderItemRepository.findByOrderId(orderId).stream().map(OrderItemConverter::toDto).toList();
     }
 

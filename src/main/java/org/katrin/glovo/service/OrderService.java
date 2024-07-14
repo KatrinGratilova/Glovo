@@ -9,7 +9,7 @@ import org.katrin.glovo.entity.OrderEntity;
 import org.katrin.glovo.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 
@@ -17,7 +17,7 @@ import java.util.Collection;
 public class OrderService {
     private OrderRepository orderRepository;
 
-    public Collection<OrderDto> getAll() {
+    public List<OrderDto> getAll() {
         return orderRepository.findAll().stream().map(OrderConverter::toDto).toList();
     }
 
@@ -27,12 +27,12 @@ public class OrderService {
 
     public OrderDto save(OrderDto orderDto) {
         OrderEntity orderEntity = orderRepository.save(OrderConverter.toEntity(orderDto));
-        return OrderConverter.toDto(orderEntity);
+        return OrderConverter.toDto(orderEntity);  //TODO: default date, empty list
     }
 
     public OrderDto update(OrderDto orderDto) {
         OrderEntity orderEntity = orderRepository.save(OrderConverter.toEntity(orderDto));
-        return OrderConverter.toDto(orderEntity);
+        return OrderConverter.toDto(orderEntity);  //TODO:
     }
 
     public OrderDto addItem(int orderId, OrderItemDto orderItemDto) {

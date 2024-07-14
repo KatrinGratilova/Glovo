@@ -5,7 +5,7 @@ import org.katrin.glovo.dto.ProductDto;
 import org.katrin.glovo.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 
@@ -15,7 +15,7 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping()
-    public Collection<ProductDto> getAll() {
+    public List<ProductDto> getAll() {
         return productService.getAll();
     }
 
