@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
 import org.katrin.glovo.entity.OrderEntity;
 import org.katrin.glovo.entity.OrderItemEntity;
+import org.katrin.glovo.entity.ProductEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,21 +20,15 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
         if (orderEntity == null) {
             throw new IllegalArgumentException("Order not found for id: " + orderId);
         }
-
-        // Установіть зв'язок між OrderItemEntity та OrderEntity
-        orderItemEntity.setOrder(orderEntity);
-
-        // Використовуйте merge замість persist
-        if (orderItemEntity.getId() == 0) {
-            entityManager.persist(orderItemEntity);
-        } else {
-            entityManager.merge(orderItemEntity);
+        ProductEntity productEntity = entityManager.find(ProductEntity.class, orderItemEntity.getProduct().getId());
+        if (productEntity == null) {
+            throw new IllegalArgumentException("Product not found for id: " + orderItemEntity.getProduct().getId());
         }
 
-        // Додайте збережений OrderItemEntity до OrderEntity
+        orderItemEntity.setProduct(productEntity);
+        orderItemEntity.setOrder(orderEntity);
         orderEntity.getItems().add(orderItemEntity);
 
-        // Оновіть OrderEntity (може бути необов'язково, залежить від каскадного типу)
         entityManager.merge(orderEntity);
 
         return orderEntity;

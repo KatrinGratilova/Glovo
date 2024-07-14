@@ -20,14 +20,12 @@ public class OrderItemEntity {
     @Column(name = "order_item_id", nullable = false)
     private int id;
 
-    //@Column(nullable = false)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id", nullable = false)
     private OrderEntity order;
 
-    //@Column(nullable = false)
-    @OneToOne(cascade = CascadeType.REFRESH)
-    @PrimaryKeyJoinColumn(name = "product_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
 
     @Column(nullable = false)
