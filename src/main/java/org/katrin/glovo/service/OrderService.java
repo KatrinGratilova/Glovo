@@ -27,7 +27,7 @@ public class OrderService {
 
     public OrderDto save(OrderDto orderDto) {
         OrderEntity orderEntity = orderRepository.save(OrderConverter.toEntity(orderDto));
-        return OrderConverter.toDto(orderEntity);  //TODO: default date, empty list
+        return OrderConverter.toDto(orderEntity);
     }
 
     public OrderDto update(OrderDto orderDto) {

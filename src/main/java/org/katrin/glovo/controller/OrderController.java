@@ -40,7 +40,7 @@ public class OrderController {
 
     @GetMapping("/{id}/items")
     public List<OrderItemDto> getItems(@PathVariable int id) {
-        return orderItemService.findByOrderId(id); //TODO: impossible lol
+        return orderItemService.findByOrderId(id);
     }
 
     @PostMapping("/{id}/items")

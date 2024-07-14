@@ -43,4 +43,11 @@ public class OrderEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn(name = "order_id")
     private List<OrderItemEntity> items = new ArrayList<>();
+
+    @PrePersist
+    public void prePersist() {
+        if (this.checkoutDate == null) {
+            this.checkoutDate = LocalDateTime.now();
+        }
+    }
 }
