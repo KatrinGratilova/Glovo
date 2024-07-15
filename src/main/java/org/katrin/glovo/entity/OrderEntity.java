@@ -14,6 +14,7 @@ import org.katrin.glovo.dto.OrderStatus;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Builder
@@ -32,11 +33,11 @@ public class OrderEntity {
     private String customerName;
 
     @JsonProperty("status")
-    @Column(columnDefinition = "IN_PROCESSING")
+    @Column(nullable = false, columnDefinition = "varchar(35) default 'IN_PROCESSING'")
     private OrderStatus status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column(name = "checkout_date", nullable = false)
+    @Column(name = "checkout_date", nullable = false, columnDefinition = "timestamp default now()")
     @ColumnDefault("CURRENT_DATE")
     private LocalDateTime checkoutDate;
 
@@ -45,9 +46,8 @@ public class OrderEntity {
     private List<OrderItemEntity> items = new ArrayList<>();
 
     @PrePersist
-    public void prePersist() {
-        if (this.checkoutDate == null) {
-            this.checkoutDate = LocalDateTime.now();
-        }
+    public void onCreate() {
+        checkoutDate = Optional.ofNullable(checkoutDate).orElse(LocalDateTime.now());
+        status = Optional.ofNullable(status).orElse(OrderStatus.IN_PROCESSING);
     }
 }

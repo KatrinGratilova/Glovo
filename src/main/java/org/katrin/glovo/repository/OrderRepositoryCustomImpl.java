@@ -8,10 +8,28 @@ import org.katrin.glovo.entity.ProductEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 @Repository
 public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
     private final EntityManager entityManager;
+
+    @Override
+    @Transactional
+    public OrderEntity updateWithoutItems(OrderEntity orderModified) {
+        OrderEntity order = entityManager.find(OrderEntity.class, orderModified.getId());
+        if (order == null) {
+            throw new IllegalArgumentException("Order not found for id: " + orderModified.getId());
+        }
+        order.setCustomerName(orderModified.getCustomerName());
+        order.setCheckoutDate(Optional.ofNullable(orderModified.getCheckoutDate()).orElse(order.getCheckoutDate()));
+        order.setStatus(Optional.ofNullable(orderModified.getStatus()).orElse(order.getStatus()));
+
+        order = entityManager.merge(order);
+
+        return order;
+    }
 
     @Override
     @Transactional

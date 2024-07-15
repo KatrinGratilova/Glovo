@@ -30,9 +30,9 @@ public class OrderService {
         return OrderConverter.toDto(orderEntity);
     }
 
-    public OrderDto update(OrderDto orderDto) {
-        OrderEntity orderEntity = orderRepository.save(OrderConverter.toEntity(orderDto));
-        return OrderConverter.toDto(orderEntity);  //TODO:
+    public OrderDto updateWithoutItems(OrderDto orderDto) {
+        OrderEntity orderEntity = orderRepository.updateWithoutItems(OrderConverter.toEntity(orderDto));
+        return OrderConverter.toDto(orderEntity);
     }
 
     public OrderDto addItem(int orderId, OrderItemDto orderItemDto) {

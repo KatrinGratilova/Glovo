@@ -33,9 +33,9 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public OrderDto update(@PathVariable int id, @RequestBody OrderDto orderDto) {
+    public OrderDto updateWithoutItems(@PathVariable int id, @RequestBody OrderDto orderDto) {
         orderDto.setId(id);
-        return orderService.update(orderDto);
+        return orderService.updateWithoutItems(orderDto);
     }
 
     @GetMapping("/{id}/items")
