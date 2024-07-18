@@ -5,7 +5,7 @@ import org.katrin.glovo.dto.OrderItemDto;
 import org.katrin.glovo.service.OrderItemService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 
@@ -14,14 +14,14 @@ import java.util.Collection;
 public class OrderItemController {
     private final OrderItemService orderItemService;
 
+    @GetMapping
+    public List<OrderItemDto> getAll() {
+        return orderItemService.getAll();
+    }
+
     @GetMapping("/{id}")
     public OrderItemDto getById(@PathVariable int id) {
         return orderItemService.getById(id);
-    }
-
-    @GetMapping
-    public Collection<OrderItemDto> getAll() {
-        return orderItemService.getAll();
     }
 
     @PutMapping("/{id}")

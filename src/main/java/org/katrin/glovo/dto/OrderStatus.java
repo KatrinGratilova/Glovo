@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum OrderStatus {
-    PROCESSING("In processing"),
+    IN_PROCESSING("In processing"),
     AWAITING_PAYMENT("Awaiting payment"),
     AWAITING_SHIPMENT("Awaiting shipment"),
     SENT("Sent"),

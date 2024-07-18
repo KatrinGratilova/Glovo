@@ -1,11 +1,13 @@
 package org.katrin.glovo.service;
 
 import lombok.AllArgsConstructor;
+import org.katrin.glovo.converter.ProductConverter;
 import org.katrin.glovo.dto.ProductDto;
+import org.katrin.glovo.entity.ProductEntity;
 import org.katrin.glovo.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 
@@ -13,23 +15,25 @@ import java.util.Collection;
 public class ProductService {
     private ProductRepository productRepository;
 
-    public Collection<ProductDto> getAll() {
-        return productRepository.getAll();
+    public List<ProductDto> getAll() {
+        return productRepository.findAll().stream().map(ProductConverter::toDto).toList();
     }
 
     public ProductDto getById(int id) {
-        return productRepository.getById(id);
+        return productRepository.findById(id).map(ProductConverter::toDto).orElseThrow();
     }
 
     public ProductDto save(ProductDto productDto) {
-        return productRepository.save(productDto);
+        ProductEntity productEntity = productRepository.save(ProductConverter.toEntity(productDto));
+        return ProductConverter.toDto(productEntity);
     }
 
     public ProductDto update(ProductDto productDto) {
-        return productRepository.update(productDto);
+        ProductEntity productEntity = productRepository.save(ProductConverter.toEntity(productDto));
+        return ProductConverter.toDto(productEntity);
     }
 
     public void delete(int id) {
-        productRepository.delete(id);
+        productRepository.deleteById(id);
     }
 }

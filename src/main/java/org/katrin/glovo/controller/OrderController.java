@@ -3,10 +3,11 @@ package org.katrin.glovo.controller;
 import lombok.AllArgsConstructor;
 import org.katrin.glovo.dto.OrderDto;
 import org.katrin.glovo.dto.OrderItemDto;
+import org.katrin.glovo.service.OrderItemService;
 import org.katrin.glovo.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
+import java.util.List;
 
 @AllArgsConstructor
 
@@ -14,9 +15,10 @@ import java.util.Collection;
 @RequestMapping("/orders")
 public class OrderController {
     private OrderService orderService;
+    private OrderItemService orderItemService;
 
     @GetMapping()
-    public Collection<OrderDto> getAll() {
+    public List<OrderDto> getAll() {
         return orderService.getAll();
     }
 
@@ -31,24 +33,19 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public OrderDto update(@PathVariable int id, @RequestBody OrderDto orderDto) {
+    public OrderDto updateWithoutItems(@PathVariable int id, @RequestBody OrderDto orderDto) {
         orderDto.setId(id);
-        return orderService.update(orderDto);
+        return orderService.updateWithoutItems(orderDto);
     }
 
     @GetMapping("/{id}/items")
-    public Collection<Integer> getItems(@PathVariable int id) {
-        return orderService.getItems(id);
+    public List<OrderItemDto> getItems(@PathVariable int id) {
+        return orderItemService.findByOrderId(id);
     }
 
-    @PostMapping("/{orderId}/items")
-    public OrderDto addItem(@PathVariable int orderId, @RequestBody OrderItemDto orderItemDto) {
-        return orderService.addItem(orderId, orderItemDto);
-    }
-
-    @DeleteMapping("/{orderId}/items/{orderItemId}")
-    public OrderDto removeItem(@PathVariable int orderId, @PathVariable int orderItemId) {
-        return orderService.removeItem(orderId, orderItemId);
+    @PostMapping("/{id}/items")
+    public OrderDto addItem(@PathVariable int id, @RequestBody OrderItemDto orderItemDto) {
+        return orderService.addItem(id, orderItemDto);
     }
 
     @DeleteMapping("/{id}")
