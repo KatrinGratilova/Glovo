@@ -33,6 +33,7 @@ public class ProductServiceTest {
         List<ProductDto> actual = productService.getAll();
 
         assertEquals(actual, productDtos);
+        assertEquals(actual.size(), productEntities.size());
         verify(productRepository, times(1)).findAll();
     }
 
