@@ -26,7 +26,7 @@ public class ProductServiceTest {
     @Test
     public void getAll_ok() {
         List<ProductDto> productDtos = List.of(new ProductDto(), new ProductDto());
-        List<ProductEntity> productEntities = List.of(new ProductEntity(), new ProductEntity());
+        List<ProductEntity> productEntities = productDtos.stream().map(ProductConverter::toEntity).toList();
 
         when(productRepository.findAll()).thenReturn(productEntities);
 
