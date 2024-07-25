@@ -22,7 +22,7 @@ import java.util.Optional;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "order", schema = "public")
+@Table(name = "orders", schema = "public")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,11 +33,11 @@ public class OrderEntity {
     private String customerName;
 
     @JsonProperty("status")
-    @Column(nullable = false, columnDefinition = "varchar(35) default 'IN_PROCESSING'")
+    @Column(nullable = false)
     private OrderStatus status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column(name = "checkout_date", nullable = false, columnDefinition = "timestamp default now()")
+    @Column(name = "checkout_date", nullable = false)
     @ColumnDefault("CURRENT_DATE")
     private LocalDateTime checkoutDate;
 
