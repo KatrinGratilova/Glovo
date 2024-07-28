@@ -32,9 +32,8 @@ public class OrderController {
         return orderService.save(orderDto);
     }
 
-    @PutMapping("/{id}")
-    public OrderDto updateWithoutItems(@PathVariable int id, @RequestBody OrderDto orderDto) {
-        orderDto.setId(id);
+    @PutMapping
+    public OrderDto updateWithoutItems(@RequestBody OrderDto orderDto) {
         return orderService.updateWithoutItems(orderDto);
     }
 

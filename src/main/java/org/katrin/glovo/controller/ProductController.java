@@ -29,9 +29,8 @@ public class ProductController {
         return productService.save(productDto);
     }
 
-    @PutMapping("/{id}")
-    public ProductDto update(@PathVariable int id, @RequestBody ProductDto productDto) {
-        productDto.setId(id);
+    @PutMapping
+    public ProductDto update(@RequestBody ProductDto productDto) {
         return productService.update(productDto);
     }
 
