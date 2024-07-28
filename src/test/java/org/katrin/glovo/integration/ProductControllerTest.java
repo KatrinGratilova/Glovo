@@ -1,6 +1,5 @@
 package org.katrin.glovo.integration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,18 +27,17 @@ public class ProductControllerTest {
     @Autowired
     private ProductService productService;
     private final ObjectMapper mapper = new ObjectMapper();
+    private ProductDto prDto1 = ProductDto.builder().name("Product 1").price(34.12).build();
+    private ProductDto prDto2 = ProductDto.builder().name("Product 2").price(67.89).build();
 
 
     @BeforeEach
-    public void deleteAll() {
+    public void init() {
         productRepository.deleteAll();
     }
 
     @Test
     public void getAllTest() throws Exception {
-        ProductDto prDto1 = ProductDto.builder().name("Product 1").price(34.12).build();
-        ProductDto prDto2 = ProductDto.builder().name("Product 2").price(67.89).build();
-
         prDto1 = productService.save(prDto1);
         prDto2 = productService.save(prDto2);
 
@@ -50,51 +48,49 @@ public class ProductControllerTest {
 
     @Test
     public void getByIdTest() throws Exception {
-        ProductDto prDto = ProductDto.builder().name("Product 1").price(34.12).build();
-
-        prDto = productService.save(prDto);
-        int id = prDto.getId();
+        prDto1 = productService.save(prDto1);
+        int id = prDto1.getId();
 
         mockMvc.perform(get("/products/{id}", id).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(mapper.writeValueAsString(prDto), true));
+                .andExpect(content().json(mapper.writeValueAsString(prDto1), true));
     }
 
     @Test
     public void saveTest() throws Exception {
-        ProductDto prDto = ProductDto.builder().name("Product 1").price(34.12).build();
-
         mockMvc.perform(post("/products")
-                        .content(mapper.writeValueAsString(prDto))
+                        .content(mapper.writeValueAsString(prDto1))
                         .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.name").value(prDto.getName()))
-                .andExpect(jsonPath("$.price").value(prDto.getPrice()))
+                .andExpect(jsonPath("$.name").value(prDto1.getName()))
+                .andExpect(jsonPath("$.price").value(prDto1.getPrice()))
                 .andExpect(jsonPath("$.country").value("Ukraine"));
     }
 
     @Test
     public void updateTest() throws Exception {
-        ProductDto prDto = ProductDto.builder().name("Product 1").price(34.12).build();
+        prDto1 = productService.save(prDto1);
+        prDto1.setName("Product 1 UPDATED");
 
-        prDto = productService.save(prDto);
-        int id = prDto.getId();
-
-        mockMvc.perform(post("/products")
-                        .content(mapper.writeValueAsString(prDto))
+        mockMvc.perform(put("/products")
                         .contentType(MediaType.APPLICATION_JSON)
-                )
+                        .content(mapper.writeValueAsString(prDto1)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.name").value(prDto.getName()))
-                .andExpect(jsonPath("$.price").value(prDto.getPrice()))
-                .andExpect(jsonPath("$.country").value("Ukraine"));
+                .andExpect(content().json(mapper.writeValueAsString(prDto1), true));
     }
 
-//    @DeleteMapping("/{id}")
-//    public void delete(@PathVariable int id) {
-//        productService.delete(id);
-//    }
+    @Test
+    public void deleteTest() throws Exception {
+        prDto1 = productService.save(prDto1);
+        int id = prDto1.getId();
+
+        mockMvc.perform(delete("/products/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+//
+//        mockMvc.perform(get("/products/{id}", id).contentType(MediaType.APPLICATION_JSON))
+//                .andExpect();
+    }
 }
