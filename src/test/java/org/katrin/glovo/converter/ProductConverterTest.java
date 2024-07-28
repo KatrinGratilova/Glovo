@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ProductConverterTest {
 
     @Test
-    public void testToDto() {
+    public void toDtoTest() {
         ProductEntity productEntity = ProductEntity.builder()
                 .id(1)
                 .name("Test Product")
@@ -28,7 +28,7 @@ public class ProductConverterTest {
     }
 
     @Test
-    public void testToEntity() {
+    public void toEntityTest() {
         ProductDto productDto = ProductDto.builder()
                 .id(1)
                 .name("Test Product")
