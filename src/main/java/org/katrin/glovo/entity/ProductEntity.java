@@ -6,7 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+
+import java.util.Optional;
 
 @Data
 @Builder
@@ -14,7 +15,7 @@ import org.hibernate.annotations.ColumnDefault;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "product", schema = "public")
+@Table(name = "products", schema = "public")
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,11 +29,15 @@ public class ProductEntity {
     @Min(0)
     private int stockQuantity;
 
-    @ColumnDefault("Ukraine")
     @Column(nullable = false)
     private String country;
 
     @Column(nullable = false)
     @Min(0)
     private double price;
+
+    @PrePersist
+    public void onCreate() {
+        country = Optional.ofNullable(country).orElse("Ukraine");
+    }
 }
