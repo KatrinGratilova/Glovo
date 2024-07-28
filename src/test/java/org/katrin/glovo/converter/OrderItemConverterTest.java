@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OrderItemConverterTest {
     @Test
-    public void toDto() {
+    public void toDtoTest() {
         OrderItemEntity orderItemEntity = OrderItemEntity.builder()
                 .id(1)
                 .price(12.2)
@@ -29,7 +29,7 @@ public class OrderItemConverterTest {
     }
 
     @Test
-    public void toEntity() {
+    public void toEntityTest() {
         OrderItemDto orderItemDto = OrderItemDto.builder()
                 .id(1)
                 .price(12.2)

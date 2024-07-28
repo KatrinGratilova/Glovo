@@ -24,7 +24,7 @@ public class ProductServiceTest {
     private ProductService productService;
 
     @Test
-    public void getAll_ok() {
+    public void getAllTest_ok() {
         List<ProductDto> productDtos = List.of(new ProductDto(), new ProductDto());
         List<ProductEntity> productEntities = productDtos.stream().map(ProductConverter::toEntity).toList();
 
@@ -38,7 +38,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getById_ok() {
+    public void getByIdTest_ok() {
         int id = 1;
         ProductDto productDto = ProductDto.builder().id(id).build();
         ProductEntity productEntity = ProductConverter.toEntity(productDto);
@@ -53,7 +53,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getById_notFound() {
+    public void getByIdTest_notFound() {
         int id = 1;
 
         when(productRepository.findById(1)).thenReturn(Optional.empty());
@@ -63,7 +63,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    void save_ok() {
+    void saveTest_ok() {
         int id = 1;
         ProductDto productDto = ProductDto.builder().id(id).build();
         ProductEntity productEntity = ProductConverter.toEntity(productDto);
@@ -77,7 +77,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void update_ok() {
+    public void updateTest_ok() {
         int id = 1;
         ProductDto productDto = ProductDto.builder().id(id).build();
         ProductEntity productEntity = ProductConverter.toEntity(productDto);
@@ -91,7 +91,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void deleteById_ok() {
+    public void deleteByIdTest_ok() {
         int id = 1;
 
         doNothing().when(productRepository).deleteById(id);

@@ -24,7 +24,7 @@ public class OrderItemServiceTest {
     private OrderItemService orderItemService;
 
     @Test
-    public void getById_ok() {
+    public void getByIdTest_ok() {
         int id = 1;
         OrderItemDto orderItemDto = OrderItemDto.builder().id(id).build();
         OrderItemEntity orderItemEntity = OrderItemConverter.toEntity(orderItemDto);
@@ -39,7 +39,7 @@ public class OrderItemServiceTest {
     }
 
     @Test
-    public void getById_notFound() {
+    public void getByIdTest_notFound() {
         int id = 1;
 
         when(orderItemRepository.findById(1)).thenReturn(Optional.empty());
@@ -49,7 +49,7 @@ public class OrderItemServiceTest {
     }
 
     @Test
-    public void getAll_ok() {
+    public void getAllTest_ok() {
         int orderId = 1;
         List<OrderItemDto> orderItemDtos = List.of(OrderItemDto.builder().orderId(orderId).build(), OrderItemDto.builder().orderId(orderId).build());
         List<OrderItemEntity> orderItemEntities = orderItemDtos.stream().map(OrderItemConverter::toEntity).toList();
@@ -64,7 +64,7 @@ public class OrderItemServiceTest {
     }
 
     @Test
-    public void findByOrderId_ok() {
+    public void findByOrderIdTest_ok() {
         int orderId = 1;
         List<OrderItemDto> orderItemDtos = List.of(OrderItemDto.builder().orderId(orderId).build(), OrderItemDto.builder().orderId(orderId).build());
         List<OrderItemEntity> orderItemEntities = orderItemDtos.stream().map(OrderItemConverter::toEntity).toList();
@@ -79,7 +79,7 @@ public class OrderItemServiceTest {
     }
 
     @Test
-    public void update_ok() {
+    public void updateTest_ok() {
         int id = 1;
         OrderItemDto orderItemDto = OrderItemDto.builder().id(id).build();
         OrderItemEntity orderItemEntity = OrderItemConverter.toEntity(orderItemDto);
@@ -93,7 +93,7 @@ public class OrderItemServiceTest {
     }
 
     @Test
-    public void deleteById_ok() {
+    public void deleteByIdTest_ok() {
         int id = 1;
 
         doNothing().when(orderItemRepository).deleteById(id);

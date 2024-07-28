@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class OrderConverterTest {
     @Test
-    public void toDto() {
+    public void toDtoTest() {
         OrderEntity orderEntity = OrderEntity.builder()
                 .id(1)
                 .customerName("Katrin")
@@ -32,7 +32,7 @@ public class OrderConverterTest {
     }
 
     @Test
-    public void toEntity() {
+    public void toEntityTest() {
         OrderDto orderDto = OrderDto.builder()
                 .id(1)
                 .customerName("Katrin")

@@ -28,7 +28,7 @@ public class OrderServiceTest {
     private OrderService orderService;
 
     @Test
-    public void getAll_ok() {
+    public void getAllTest_ok() {
         List<OrderDto> orderDtos = List.of(OrderDto.builder().items(new ArrayList<>()).build(),
                 OrderDto.builder().items(new ArrayList<>()).build());
         List<OrderEntity> orderEntities = List.of(OrderEntity.builder().items(new ArrayList<>()).build(),
@@ -44,7 +44,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void getById_ok() {
+    public void getByIdTest_ok() {
         int id = 1;
         OrderDto orderDto = OrderDto.builder().id(id).items(new ArrayList<>()).build();
         OrderEntity orderEntity = OrderConverter.toEntity(orderDto);
@@ -59,7 +59,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void getById_notFound() {
+    public void getByIdTest_notFound() {
         int id = 1;
 
         when(orderRepository.findById(1)).thenReturn(Optional.empty());
@@ -69,7 +69,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    void save_ok() {
+    void saveTest_ok() {
         int id = 1;
         OrderDto orderDto = OrderDto.builder().id(id).items(new ArrayList<>()).build();
         OrderEntity orderEntity = OrderConverter.toEntity(orderDto);
@@ -83,7 +83,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void updateWithoutItems_ok() {
+    public void updateWithoutItemsTest_ok() {
         int id = 1;
         OrderDto orderDto = OrderDto.builder().id(id).items(new ArrayList<>()).build();
         OrderEntity orderEntity = OrderConverter.toEntity(orderDto);
@@ -97,7 +97,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void addItem() {
+    public void addItemTest_ok() {
         int orderId = 1;
         int orderItemId = 12;
 
@@ -117,7 +117,7 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void deleteById_ok() {
+    public void deleteByIdTest_ok() {
         int id = 1;
 
         doNothing().when(orderRepository).deleteById(id);
