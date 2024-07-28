@@ -4,16 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.katrin.glovo.dto.OrderDto;
-import org.katrin.glovo.dto.OrderItemDto;
-import org.katrin.glovo.dto.ProductDto;
-import org.katrin.glovo.entity.OrderEntity;
-import org.katrin.glovo.entity.OrderItemEntity;
-import org.katrin.glovo.entity.ProductEntity;
+import org.katrin.glovo.dto.*;
 import org.katrin.glovo.repository.OrderRepository;
-import org.katrin.glovo.repository.ProductRepository;
-import org.katrin.glovo.service.OrderService;
-import org.katrin.glovo.service.ProductService;
+import org.katrin.glovo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,8 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,13 +31,11 @@ class OrderControllerTest {
     private OrderService orderService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private OrderItemService orderItemService;
     private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
     private OrderDto orderDto1;
     private OrderDto orderDto2;
-
-    @Autowired
-    private ProductRepository productRepository;
-
 
     @BeforeEach
     public void init() {
@@ -107,28 +98,22 @@ class OrderControllerTest {
 
     @Test
     public void getItemsTest() throws Exception {
-        OrderEntity orderEntity1 = OrderEntity.builder()
-                .customerName("Customer 1")
-                .checkoutDate(LocalDateTime.of(12, 12, 12, 12, 12))
-                .items(new ArrayList<>())
-                .build();
-        orderEntity1 = orderRepository.save(orderEntity1);
-        int orderId = orderEntity1.getId();
+        orderDto2 = orderService.save(orderDto2);
+        int orderId = orderDto2.getId();
 
-        ProductEntity productEntity = ProductEntity.builder().name("Product 1").stockQuantity(12).build();
-        productEntity = productRepository.save(productEntity);
+        ProductDto productDto = ProductDto.builder().name("Product 2").stockQuantity(12).build();
+        productDto = productService.save(productDto);
 
-        OrderItemEntity orderItemEntity1 = OrderItemEntity.builder().quantity(456).price(34.12).product(productEntity).order(orderEntity1).build();
+        OrderItemDto orderItemDto = OrderItemDto.builder().quantity(456).price(34.12).productId(productDto.getId()).build();
+        orderDto2 = orderService.addItem(orderDto2.getId(), orderItemDto);
 
-        orderEntity1.getItems().add(orderItemEntity1);
-        orderRepository.save(orderEntity1);
+        int orderItemId = orderDto2.getItems().getFirst();
+        orderItemDto = orderItemService.getById(orderItemId);
 
         mockMvc.perform(get("/orders/{id}/items", orderId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].productId").value(productEntity.getId()));
+                .andExpect(content().json(mapper.writeValueAsString(Collections.singletonList(orderItemDto))));
     }
 
     @Test
@@ -138,7 +123,6 @@ class OrderControllerTest {
 
         ProductDto productDto = ProductDto.builder().name("Product 1").stockQuantity(12).build();
         productDto = productService.save(productDto);
-
 
         OrderItemDto orderItemDto = OrderItemDto.builder()
                 .quantity(456)
@@ -153,7 +137,10 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.id").value(orderId))
                 .andExpect(jsonPath("$.items").isNotEmpty());
 
-        mockMvc.perform(get("/items/{id}", orderId).contentType(MediaType.APPLICATION_JSON))
+        orderDto1 = orderService.getById(orderId);
+        int orderItemId = orderDto1.getItems().getFirst();
+
+        mockMvc.perform(get("/items/{id}", orderItemId).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.price").value(orderItemDto.getPrice()))
@@ -166,8 +153,7 @@ class OrderControllerTest {
         orderDto1 = orderService.save(orderDto1);
         int id = orderDto1.getId();
 
-        mockMvc.perform(delete("/orders/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/orders/{id}", id).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 }

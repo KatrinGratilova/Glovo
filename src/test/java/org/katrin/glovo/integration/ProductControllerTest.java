@@ -86,11 +86,7 @@ public class ProductControllerTest {
         prDto1 = productService.save(prDto1);
         int id = prDto1.getId();
 
-        mockMvc.perform(delete("/products/{id}", id)
-                        .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/products/{id}", id).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-//
-//        mockMvc.perform(get("/products/{id}", id).contentType(MediaType.APPLICATION_JSON))
-//                .andExpect();
     }
 }
