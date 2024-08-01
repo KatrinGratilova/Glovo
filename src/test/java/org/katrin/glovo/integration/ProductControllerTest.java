@@ -88,5 +88,8 @@ public class ProductControllerTest {
 
         mockMvc.perform(delete("/products/{id}", id).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        mockMvc.perform(get("/products/{id}", id).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
