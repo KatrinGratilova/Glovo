@@ -88,5 +88,8 @@ class OrderItemControllerTest {
 
         mockMvc.perform(delete("/items/{id}", id).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        mockMvc.perform(get("/items/{id}", id).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
