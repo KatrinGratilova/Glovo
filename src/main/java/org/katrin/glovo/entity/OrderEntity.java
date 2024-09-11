@@ -29,8 +29,9 @@ public class OrderEntity {
     @Column(name = "order_id", nullable = false)
     private int id;
 
-    @Column(name = "customer_name", nullable = false)
-    private String customerName;
+    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
+    @JoinColumn
+    private UserEntity client;
 
     @JsonProperty("status")
     @Column(nullable = false)
@@ -41,7 +42,7 @@ public class OrderEntity {
     @ColumnDefault("CURRENT_DATE")
     private LocalDateTime checkoutDate;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn(name = "order_id")
     private List<OrderItemEntity> items = new ArrayList<>();
 

@@ -15,7 +15,7 @@ import java.util.Optional;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "products", schema = "public")
+@Table(name = "product", schema = "public")
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
