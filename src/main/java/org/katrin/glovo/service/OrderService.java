@@ -6,7 +6,8 @@ import org.katrin.glovo.converter.OrderItemConverter;
 import org.katrin.glovo.dto.OrderDto;
 import org.katrin.glovo.dto.OrderItemDto;
 import org.katrin.glovo.entity.OrderEntity;
-import org.katrin.glovo.repository.OrderRepository;
+import org.katrin.glovo.exception.CannotAddItem;
+import org.katrin.glovo.repository.Order.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,9 +36,16 @@ public class OrderService {
         return OrderConverter.toDto(orderEntity);
     }
 
-    public OrderDto addItem(int orderId, OrderItemDto orderItemDto) {
+    public OrderDto addItem(int orderId, OrderItemDto orderItemDto){
         OrderEntity orderEntity = orderRepository.addItem(orderId, OrderItemConverter.toEntity(orderItemDto));
+        if (orderEntity == null)
+            throw new CannotAddItem("Cannot add item to order");
+
         return OrderConverter.toDto(orderEntity);
+    }
+
+    public List<OrderDto> getByClientId(int clientId) {
+        return orderRepository.findByClientId(clientId).stream().map(OrderConverter::toDto).toList();
     }
 
     public void delete(int id) {
