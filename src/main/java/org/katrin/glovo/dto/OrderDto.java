@@ -17,7 +17,7 @@ import java.util.List;
 public class OrderDto {
     private int id;
 
-    private String customerName;
+    private int clientId;
 
     @JsonProperty("status")
     private OrderStatus status;

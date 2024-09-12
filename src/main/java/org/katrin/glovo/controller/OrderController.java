@@ -27,11 +27,6 @@ public class OrderController {
         return orderService.getById(id);
     }
 
-    @PostMapping
-    public OrderDto save(@RequestBody OrderDto orderDto) {
-        return orderService.save(orderDto);
-    }
-
     @PutMapping
     public OrderDto updateWithoutItems(@RequestBody OrderDto orderDto) {
         return orderService.updateWithoutItems(orderDto);

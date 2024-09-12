@@ -1,6 +1,7 @@
-package org.katrin.glovo.repository;
+package org.katrin.glovo.repository.Order;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.katrin.glovo.entity.OrderEntity;
 import org.katrin.glovo.entity.OrderItemEntity;
@@ -19,10 +20,10 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
     @Transactional
     public OrderEntity updateWithoutItems(OrderEntity orderModified) {
         OrderEntity order = entityManager.find(OrderEntity.class, orderModified.getId());
-        if (order == null) {
-            throw new IllegalArgumentException("Order not found for id: " + orderModified.getId());
-        }
-        order.setCustomerName(orderModified.getCustomerName());
+        if (order == null)
+            throw new EntityNotFoundException("Order not found for id: " + orderModified.getId());
+
+        order.setClient(orderModified.getClient());
         order.setCheckoutDate(Optional.ofNullable(orderModified.getCheckoutDate()).orElse(order.getCheckoutDate()));
         order.setStatus(Optional.ofNullable(orderModified.getStatus()).orElse(order.getStatus()));
 
@@ -33,14 +34,14 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
     @Override
     @Transactional
-    public OrderEntity addItem(int orderId, OrderItemEntity orderItemEntity) {
+    public OrderEntity addItem(int orderId, OrderItemEntity orderItemEntity) throws EntityNotFoundException {
         OrderEntity orderEntity = entityManager.find(OrderEntity.class, orderId);
         if (orderEntity == null) {
-            throw new IllegalArgumentException("Order not found for id: " + orderId);
+            throw new EntityNotFoundException("Order not found for id: " + orderId);
         }
         ProductEntity productEntity = entityManager.find(ProductEntity.class, orderItemEntity.getProduct().getId());
         if (productEntity == null) {
-            throw new IllegalArgumentException("Product not found for id: " + orderItemEntity.getProduct().getId());
+            throw new EntityNotFoundException("Product not found for id: " + orderItemEntity.getProduct().getId());
         }
 
         orderItemEntity.setProduct(productEntity);
@@ -49,6 +50,6 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
         entityManager.merge(orderEntity);
 
-        return entityManager.find(OrderEntity.class,orderEntity.getId());
+        return entityManager.find(OrderEntity.class, orderEntity.getId());
     }
 }

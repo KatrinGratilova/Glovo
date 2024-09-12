@@ -3,6 +3,7 @@ package org.katrin.glovo.converter;
 import org.katrin.glovo.dto.OrderDto;
 import org.katrin.glovo.entity.OrderEntity;
 import org.katrin.glovo.entity.OrderItemEntity;
+import org.katrin.glovo.entity.UserEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ public class OrderConverter {
     public static OrderDto toDto(OrderEntity orderEntity) {
         return OrderDto.builder()
                 .id(orderEntity.getId())
-                .customerName(orderEntity.getCustomerName())
+                .clientId(orderEntity.getClient().getId())
                 .status(orderEntity.getStatus())
                 .checkoutDate(orderEntity.getCheckoutDate())
                 .items(orderEntity.getItems().stream().map(OrderItemEntity::getId).toList())
@@ -24,7 +25,7 @@ public class OrderConverter {
         List<OrderItemEntity> orderItemEntities = orderItemDtos.stream().map(i -> OrderItemEntity.builder().id(i).build()).toList();
         return OrderEntity.builder()
                 .id(orderDto.getId())
-                .customerName(orderDto.getCustomerName())
+                .client(UserEntity.builder().id(orderDto.getClientId()).build())
                 .status(orderDto.getStatus())
                 .checkoutDate(orderDto.getCheckoutDate())
                 .items(orderItemEntities)
