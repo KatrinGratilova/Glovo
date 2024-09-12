@@ -11,8 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 
 @Repository
-public class UserRepositoryCustomImpl implements UserRepositoryCustom{
+public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     private final EntityManager entityManager;
+
     @Override
     @Transactional
     public UserEntity updateWithoutOrders(UserEntity userModified) {
@@ -36,6 +37,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom{
             throw new EntityNotFoundException("User not found for id: " + userId);
 
         orderEntity.setClient(userEntity);
+        userEntity.getOrders().add(orderEntity);
 
         entityManager.merge(userEntity);
 

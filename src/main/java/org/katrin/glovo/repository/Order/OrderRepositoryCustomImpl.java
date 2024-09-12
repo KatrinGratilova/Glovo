@@ -34,7 +34,7 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
     @Override
     @Transactional
-    public OrderEntity addItem(int orderId, OrderItemEntity orderItemEntity) throws EntityNotFoundException{
+    public OrderEntity addItem(int orderId, OrderItemEntity orderItemEntity) throws EntityNotFoundException {
         OrderEntity orderEntity = entityManager.find(OrderEntity.class, orderId);
         if (orderEntity == null) {
             throw new EntityNotFoundException("Order not found for id: " + orderId);
@@ -50,6 +50,6 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
         entityManager.merge(orderEntity);
 
-        return entityManager.find(OrderEntity.class,orderEntity.getId());
+        return entityManager.find(OrderEntity.class, orderEntity.getId());
     }
 }

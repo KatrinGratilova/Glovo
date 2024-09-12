@@ -17,25 +17,30 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    public List<UserDto> getAll(){
+    public List<UserDto> getAll() {
         return userRepository.findAll().stream().map(UserConverter::toDto).toList();
     }
 
-    public UserDto getById(int id){
+    public UserDto getById(int id) {
         return userRepository.findById(id).map(UserConverter::toDto).orElseThrow();
     }
 
-    public UserDto save(UserDto userDto){
+    public UserDto save(UserDto userDto) {
         UserEntity userEntity = userRepository.save(UserConverter.toEntity(userDto));
         return UserConverter.toDto(userEntity);
     }
 
-    public UserDto addOrder(int userId, OrderDto orderDto){
+    public UserDto updateWithoutOrders(UserDto userDto) {
+        UserEntity userEntity = userRepository.updateWithoutOrders(UserConverter.toEntity(userDto));
+        return UserConverter.toDto(userEntity);
+    }
+
+    public UserDto addOrder(int userId, OrderDto orderDto) {
         UserEntity userEntity = userRepository.addOrder(userId, OrderConverter.toEntity(orderDto));
         return UserConverter.toDto(userEntity);
     }
 
-    public void delete(int id){
+    public void delete(int id) {
         userRepository.deleteById(id);
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
     private final OrderService orderService;
@@ -32,13 +32,18 @@ public class UserController {
         return userService.save(userDto);
     }
 
+    @PutMapping
+    public UserDto update(@RequestBody UserDto userDto) {
+        return userService.updateWithoutOrders(userDto);
+    }
+
     @GetMapping("/{id}/orders")
     public List<OrderDto> getOrders(@PathVariable int id) {
         return orderService.getByClientId(id);
     }
 
     @PostMapping("/{id}/orders")
-    public UserDto addOrder(@PathVariable int id, @RequestBody OrderDto orderDto){
+    public UserDto addOrder(@PathVariable int id, @RequestBody OrderDto orderDto) {
         return userService.addOrder(id, orderDto);
     }
 

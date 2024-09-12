@@ -36,7 +36,7 @@ public class OrderService {
         return OrderConverter.toDto(orderEntity);
     }
 
-    public OrderDto addItem(int orderId, OrderItemDto orderItemDto){
+    public OrderDto addItem(int orderId, OrderItemDto orderItemDto) {
         OrderEntity orderEntity = orderRepository.addItem(orderId, OrderItemConverter.toEntity(orderItemDto));
         if (orderEntity == null)
             throw new CannotAddItem("Cannot add item to order");
