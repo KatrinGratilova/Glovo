@@ -24,7 +24,6 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
             throw new EntityNotFoundException("Order not found for id: " + orderModified.getId());
 
         order.setClient(orderModified.getClient());
-        order.setCheckoutDate(Optional.ofNullable(orderModified.getCheckoutDate()).orElse(order.getCheckoutDate()));
         order.setStatus(Optional.ofNullable(orderModified.getStatus()).orElse(order.getStatus()));
 
         order = entityManager.merge(order);

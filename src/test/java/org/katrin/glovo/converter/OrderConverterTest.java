@@ -5,6 +5,7 @@ import org.katrin.glovo.dto.OrderDto;
 import org.katrin.glovo.dto.OrderStatus;
 import org.katrin.glovo.entity.OrderEntity;
 import org.katrin.glovo.entity.OrderItemEntity;
+import org.katrin.glovo.entity.UserEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,18 +17,18 @@ public class OrderConverterTest {
     public void toDtoTest() {
         OrderEntity orderEntity = OrderEntity.builder()
                 .id(1)
-                .customerName("Katrin")
+                .client(UserEntity.builder().id(1).build())
                 .status(OrderStatus.IN_PROCESSING)
-                .checkoutDate(LocalDateTime.of(2024, 12, 12, 12, 12, 12))
+                .createdAt(LocalDateTime.of(2024, 12, 12, 12, 12, 12))
                 .items(List.of(OrderItemEntity.builder().id(1).build()))
                 .build();
 
         OrderDto orderDto = OrderConverter.toDto(orderEntity);
 
         assertEquals(orderEntity.getId(), orderDto.getId());
-        assertEquals(orderEntity.getCustomerName(), orderDto.getCustomerName());
+        assertEquals(orderEntity.getClient().getId(), orderDto.getClientId());
         assertEquals(orderEntity.getStatus(), orderDto.getStatus());
-        assertEquals(orderEntity.getCheckoutDate(), orderDto.getCheckoutDate());
+        assertEquals(orderEntity.getCreatedAt(), orderDto.getCreatedAt());
         assertEquals(orderEntity.getItems().stream().map(OrderItemEntity::getId).toList(), orderDto.getItems());
     }
 
@@ -35,18 +36,18 @@ public class OrderConverterTest {
     public void toEntityTest() {
         OrderDto orderDto = OrderDto.builder()
                 .id(1)
-                .customerName("Katrin")
+                .clientId(1)
                 .status(OrderStatus.IN_PROCESSING)
-                .checkoutDate(LocalDateTime.of(2024, 12, 12, 12, 12, 12))
+                .createdAt(LocalDateTime.of(2024, 12, 12, 12, 12, 12))
                 .items(List.of(1))
                 .build();
 
         OrderEntity orderEntity = OrderConverter.toEntity(orderDto);
 
         assertEquals(orderDto.getId(), orderEntity.getId());
-        assertEquals(orderDto.getCustomerName(), orderEntity.getCustomerName());
+        assertEquals(orderDto.getClientId(), orderEntity.getClient().getId());
         assertEquals(orderDto.getStatus(), orderEntity.getStatus());
-        assertEquals(orderDto.getCheckoutDate(), orderEntity.getCheckoutDate());
+        assertEquals(orderDto.getCreatedAt(), orderEntity.getCreatedAt());
         assertEquals(orderDto.getItems(), orderEntity.getItems().stream().map(OrderItemEntity::getId).toList());
     }
 }

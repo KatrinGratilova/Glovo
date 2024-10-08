@@ -15,7 +15,7 @@ public class OrderConverter {
                 .id(orderEntity.getId())
                 .clientId(orderEntity.getClient().getId())
                 .status(orderEntity.getStatus())
-                .checkoutDate(orderEntity.getCheckoutDate())
+                .createdAt(orderEntity.getCreatedAt())
                 .items(orderEntity.getItems().stream().map(OrderItemEntity::getId).toList())
                 .build();
     }
@@ -27,7 +27,7 @@ public class OrderConverter {
                 .id(orderDto.getId())
                 .client(UserEntity.builder().id(orderDto.getClientId()).build())
                 .status(orderDto.getStatus())
-                .checkoutDate(orderDto.getCheckoutDate())
+                .createdAt(orderDto.getCreatedAt())
                 .items(orderItemEntities)
                 .build();
     }

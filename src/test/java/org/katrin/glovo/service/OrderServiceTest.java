@@ -8,7 +8,7 @@ import org.katrin.glovo.dto.OrderDto;
 import org.katrin.glovo.dto.OrderItemDto;
 import org.katrin.glovo.entity.OrderEntity;
 import org.katrin.glovo.entity.OrderItemEntity;
-import org.katrin.glovo.repository.OrderRepository;
+import org.katrin.glovo.repository.Order.OrderRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;

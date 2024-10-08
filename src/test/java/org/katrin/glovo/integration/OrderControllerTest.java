@@ -5,7 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.katrin.glovo.dto.*;
-import org.katrin.glovo.repository.OrderRepository;
+import org.katrin.glovo.repository.Order.OrderRepository;
 import org.katrin.glovo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,17 +41,17 @@ class OrderControllerTest {
     public void init() {
         orderRepository.deleteAll();
         orderDto1 = OrderDto.builder()
-                .customerName("Customer 1")
-                .checkoutDate(LocalDateTime.of(12, 12, 12, 12, 12))
+                .clientId(1)
+                .createdAt(LocalDateTime.of(12, 12, 12, 12, 12))
                 .build();
         orderDto2 = OrderDto.builder()
-                .customerName("Customer 2")
+                .clientId(2)
                 .build();
     }
 
     @Test
     public void getAllTest() throws Exception {
-        orderDto2.setCheckoutDate(LocalDateTime.now());
+        orderDto2.setCreatedAt(LocalDateTime.now());
 
         orderDto1 = orderService.save(orderDto1);
         orderDto2 = orderService.save(orderDto2);
@@ -79,7 +79,7 @@ class OrderControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.customerName").value(orderDto2.getCustomerName()))
+                .andExpect(jsonPath("$.customerName").value(orderDto2.getClientId()))
                 .andExpect(jsonPath("$.status").value("IN_PROCESSING"))
                 .andExpect(jsonPath("$.checkoutDate").exists());
     }
@@ -87,7 +87,7 @@ class OrderControllerTest {
     @Test
     public void updateWithoutItemsTest() throws Exception {
         orderDto1 = orderService.save(orderDto1);
-        orderDto1.setCustomerName("Customer 1 UPDATED");
+        orderDto1.setClientId(1);
 
         mockMvc.perform(put("/orders")
                         .contentType(MediaType.APPLICATION_JSON)

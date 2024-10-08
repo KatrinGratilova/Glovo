@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.katrin.glovo.dto.OrderStatus;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class OrderEntity {
     @Column(name = "order_id", nullable = false)
     private int id;
 
+    @NotNull
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
     @JoinColumn
     private UserEntity client;
@@ -38,9 +40,9 @@ public class OrderEntity {
     private OrderStatus status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    @Column(name = "checkout_date", nullable = false)
+    @Column(name = "created_at", nullable = false)
     @ColumnDefault("CURRENT_DATE")
-    private LocalDateTime checkoutDate;
+    private LocalDateTime createdAt;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn(name = "order_id")
@@ -48,7 +50,7 @@ public class OrderEntity {
 
     @PrePersist
     public void onCreate() {
-        checkoutDate = Optional.ofNullable(checkoutDate).orElse(LocalDateTime.now());
+        createdAt = Optional.ofNullable(createdAt).orElse(LocalDateTime.now());
         status = Optional.ofNullable(status).orElse(OrderStatus.IN_PROCESSING);
     }
 }
