@@ -19,7 +19,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     public UserEntity updateWithoutOrders(UserEntity userModified) {
         UserEntity userEntity = entityManager.find(userModified.getClass(), userModified.getId());
         if (userEntity == null)
-            throw new EntityNotFoundException("User not found for id: " + userEntity.getId());
+            throw new EntityNotFoundException("User not found for id: " + userModified.getId());
 
         userEntity.setName(userModified.getName());
         userEntity.setEmail(userModified.getEmail());

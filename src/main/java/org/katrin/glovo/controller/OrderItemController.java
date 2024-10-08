@@ -16,25 +16,25 @@ public class OrderItemController {
     private final OrderItemService orderItemService;
 
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<OrderItemDto> getAll() {
         return orderItemService.getAll();
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public OrderItemDto getById(@PathVariable int id) {
         return orderItemService.getById(id);
     }
 
     @PutMapping
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public OrderItemDto update(@RequestBody OrderItemDto orderItemDto) {
         return orderItemService.update(orderItemDto);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public void deleteById(@PathVariable int id) {
         orderItemService.delete(id);
     }

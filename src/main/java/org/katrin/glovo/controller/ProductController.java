@@ -32,13 +32,13 @@ public class ProductController {
     }
 
     @PutMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public ProductDto update(@RequestBody ProductDto productDto) {
         return productService.update(productDto);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN')")
     public void deleteById(@PathVariable int id) {
         productService.delete(id);
     }

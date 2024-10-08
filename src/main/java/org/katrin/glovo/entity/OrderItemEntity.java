@@ -32,12 +32,13 @@ public class OrderItemEntity {
     @JoinColumn(name = "product_id", nullable = false)
     private ProductEntity product;
 
-    @Min(0)
-    @NotNull
+    @Min(value = 0, message = "Price cannot be negative.")
+    @NotNull(message = "Price is required")
     @Column(nullable = false, columnDefinition = "SMALLINT CHECK (price >= 0)")
     private double price;
 
+    @Min(value = 1, message = "Quantity cannot be lower than 0.")
+    @NotNull(message = "Quantity is required.")
     @Column(nullable = false, columnDefinition = "SMALLINT CHECK (quantity > 0)")
-    @Min(1)
     private int quantity;
 }

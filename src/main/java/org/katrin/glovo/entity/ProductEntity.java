@@ -28,16 +28,16 @@ public class ProductEntity {
     @Column(nullable = false)
     private String name;
 
-    @Min(value = 0, message = "Stock quantity cannot be negative")
-    @NotNull(message = "Stock quantity is required")
+    @Min(value = 0, message = "Stock quantity cannot be negative.")
+    @NotNull(message = "Stock quantity is required.")
     @Column(name = "stock_quantity", columnDefinition = "SMALLINT CHECK (stock_quantity >= 0)", nullable = false)
     private int stockQuantity;
 
     @Column(nullable = false)
     private String country;
 
-    @Min(value = 0, message = "Price cannot be negative")
-    @NotNull(message = "Price is required")
+    @Min(value = 0, message = "Price cannot be negative.")
+    @NotNull(message = "Price is required.")
     @Column(nullable = false, columnDefinition = "SMALLINT CHECK (price >= 0)")
     private double price;
 

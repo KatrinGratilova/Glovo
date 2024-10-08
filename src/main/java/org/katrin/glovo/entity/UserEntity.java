@@ -2,6 +2,7 @@ package org.katrin.glovo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class UserEntity {
     private String email;
 
     @NotNull
+
     @Column(name = "phone_number", nullable = false, unique = true)
     private String phoneNumber;
 

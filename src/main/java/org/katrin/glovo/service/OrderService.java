@@ -6,7 +6,9 @@ import org.katrin.glovo.converter.OrderItemConverter;
 import org.katrin.glovo.dto.OrderDto;
 import org.katrin.glovo.dto.OrderItemDto;
 import org.katrin.glovo.entity.OrderEntity;
-import org.katrin.glovo.exception.CannotAddItem;
+import org.katrin.glovo.entity.OrderItemEntity;
+import org.katrin.glovo.exception.InsufficientStockException;
+import org.katrin.glovo.exception.OrderException;
 import org.katrin.glovo.repository.Order.OrderRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +38,15 @@ public class OrderService {
         return OrderConverter.toDto(orderEntity);
     }
 
-    public OrderDto addItem(int orderId, OrderItemDto orderItemDto) {
-        OrderEntity orderEntity = orderRepository.addItem(orderId, OrderItemConverter.toEntity(orderItemDto));
-        if (orderEntity == null)
-            throw new CannotAddItem("Cannot add item to order");
-
-        return OrderConverter.toDto(orderEntity);
+    public OrderDto addItem(int orderId, OrderItemDto orderItemDto) throws OrderException {
+        OrderItemEntity orderItemEntity = OrderItemConverter.toEntity(orderItemDto);
+        OrderEntity updatedOrder;
+        try {
+            updatedOrder = orderRepository.addItem(orderId, orderItemEntity);
+        } catch (InsufficientStockException e) {   // Ловимо виключення недостатньої кількості товару
+            throw new OrderException(e.getMessage());  // Обгортаємо в OrderException для всіх виключень з замовленнями
+        }
+        return OrderConverter.toDto(updatedOrder);
     }
 
     public List<OrderDto> getByClientId(int clientId) {
