@@ -22,7 +22,7 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
     public OrderEntity updateWithoutItems(OrderEntity orderModified) {
         OrderEntity order = entityManager.find(OrderEntity.class, orderModified.getId());
         if (order == null)
-            throw new EntityNotFoundException("Order not found for id: " + orderModified.getId());
+            throw new EntityNotFoundException("Order not found.");
 
         order.setClient(orderModified.getClient());
         order.setStatus(Optional.ofNullable(orderModified.getStatus()).orElse(order.getStatus()));
@@ -41,7 +41,7 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
         ProductEntity productEntity = entityManager.find(ProductEntity.class, orderItemEntity.getProduct().getId());
         if (productEntity == null)
-            throw new EntityNotFoundException("Product not found for id.");
+            throw new EntityNotFoundException("Product not found.");
 
         if (orderItemEntity.getQuantity() > productEntity.getStockQuantity())
             throw new InsufficientStockException("Not enough stock available.");

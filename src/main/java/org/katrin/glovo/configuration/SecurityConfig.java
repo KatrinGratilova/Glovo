@@ -27,6 +27,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers("orders/{id}/items").authenticated();
                     authorize.requestMatchers("/users/**", "products/**", "orders/**", "items/**").permitAll();
                     authorize.anyRequest().authenticated();
                 })

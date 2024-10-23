@@ -2,15 +2,24 @@ package org.katrin.glovo.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.katrin.glovo.configuration.UsersDetailsService;
 import org.katrin.glovo.dto.*;
+import org.katrin.glovo.entity.UserEntity;
 import org.katrin.glovo.repository.Order.OrderRepository;
+import org.katrin.glovo.repository.User.UserRepository;
 import org.katrin.glovo.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -30,16 +39,31 @@ class OrderControllerTest {
     @Autowired
     private OrderService orderService;
     @Autowired
+    private UserRepository userRepository;
+    @Autowired
     private ProductService productService;
     @Autowired
     private OrderItemService orderItemService;
+    @Autowired
+    private UsersDetailsService userDetailsService;
     private final ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
     private OrderDto orderDto1;
     private OrderDto orderDto2;
+    private UserEntity userEntity;
 
     @BeforeEach
     public void init() {
+        userRepository.deleteAll();
+        userEntity = userRepository.save(UserEntity.builder()
+                .id(1)
+                .email("test@gmail.com")
+                .name("test")
+                .phoneNumber("12345")
+                .password("123")
+                .build());
+
         orderRepository.deleteAll();
+
         orderDto1 = OrderDto.builder()
                 .clientId(1)
                 .createdAt(LocalDateTime.of(12, 12, 12, 12, 12))
@@ -64,7 +88,7 @@ class OrderControllerTest {
                 .andExpect(status().isUnauthorized()); // Перевіряємо, що неавторизованому користувачу повернено 401
     }
 
-
+    @WithMockUser(username = "test@gmail.com", password = "123")
     @Test
     public void addItemTest() throws Exception {
         orderDto1 = orderService.save(orderDto1);
@@ -74,8 +98,8 @@ class OrderControllerTest {
         productDto = productService.save(productDto);
 
         OrderItemDto orderItemDto = OrderItemDto.builder()
-                .quantity(456)
-                .price(34.12)
+                .quantity(1)
+                .price(34)
                 .productId(productDto.getId())
                 .build();
 

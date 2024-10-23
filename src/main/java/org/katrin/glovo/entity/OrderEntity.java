@@ -44,7 +44,7 @@ public class OrderEntity {
     @ColumnDefault("CURRENT_DATE")
     private LocalDateTime createdAt;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", orphanRemoval = true, fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn(name = "order_id")
     private List<OrderItemEntity> items = new ArrayList<>();
 
