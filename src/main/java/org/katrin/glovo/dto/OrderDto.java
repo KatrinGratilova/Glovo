@@ -23,7 +23,7 @@ public class OrderDto {
     private OrderStatus status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime checkoutDate;
+    private LocalDateTime createdAt;
 
     private List<Integer> items;
 }

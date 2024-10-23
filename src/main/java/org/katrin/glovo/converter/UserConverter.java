@@ -15,9 +15,7 @@ public class UserConverter {
                 .email(userEntity.getEmail())
                 .phoneNumber(userEntity.getPhoneNumber())
                 .name(userEntity.getName())
-                .password(userEntity.getPassword())
                 .orders(userEntity.getOrders().stream().map(OrderEntity::getId).toList())
-                .createdAt(userEntity.getCreatedAt())
                 .build();
     }
 
@@ -29,9 +27,7 @@ public class UserConverter {
                 .email(userDto.getEmail())
                 .phoneNumber(userDto.getPhoneNumber())
                 .name(userDto.getName())
-                .password(userDto.getPassword())
                 .orders(orderEntities)
-                .createdAt(userDto.getCreatedAt())
                 .build();
     }
 }

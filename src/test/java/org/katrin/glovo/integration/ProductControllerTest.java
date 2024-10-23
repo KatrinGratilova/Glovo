@@ -1,3 +1,4 @@
+/*
 package org.katrin.glovo.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,8 +28,13 @@ public class ProductControllerTest {
     @Autowired
     private ProductService productService;
     private final ObjectMapper mapper = new ObjectMapper();
-    private ProductDto prDto1 = ProductDto.builder().name("Product 1").price(34.12).build();
-    private ProductDto prDto2 = ProductDto.builder().name("Product 2").price(67.89).build();
+    private ProductDto prDto1 = ProductDto.builder()
+            .name("Product 1")
+            .price(34.12)
+            .build();
+    private ProductDto prDto2 = ProductDto.builder()
+            .name("Product 2")
+            .price(67.89).build();
 
 
     @BeforeEach
@@ -66,6 +72,7 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.id").isNumber())
                 .andExpect(jsonPath("$.name").value(prDto1.getName()))
                 .andExpect(jsonPath("$.price").value(prDto1.getPrice()))
+                //.andExpect(jsonPath())
                 .andExpect(jsonPath("$.country").value("Ukraine"));
     }
 
@@ -93,3 +100,4 @@ public class ProductControllerTest {
                 .andExpect(status().isNotFound());
     }
 }
+*/

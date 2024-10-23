@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.katrin.glovo.entity.OrderEntity;
 import org.katrin.glovo.entity.OrderItemEntity;
 import org.katrin.glovo.entity.ProductEntity;
+import org.katrin.glovo.exception.InsufficientStockException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,10 +22,9 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
     public OrderEntity updateWithoutItems(OrderEntity orderModified) {
         OrderEntity order = entityManager.find(OrderEntity.class, orderModified.getId());
         if (order == null)
-            throw new EntityNotFoundException("Order not found for id: " + orderModified.getId());
+            throw new EntityNotFoundException("Order not found.");
 
         order.setClient(orderModified.getClient());
-        order.setCheckoutDate(Optional.ofNullable(orderModified.getCheckoutDate()).orElse(order.getCheckoutDate()));
         order.setStatus(Optional.ofNullable(orderModified.getStatus()).orElse(order.getStatus()));
 
         order = entityManager.merge(order);
@@ -34,15 +34,17 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
     @Override
     @Transactional
-    public OrderEntity addItem(int orderId, OrderItemEntity orderItemEntity) throws EntityNotFoundException {
+    public OrderEntity addItem(int orderId, OrderItemEntity orderItemEntity) throws EntityNotFoundException, InsufficientStockException {
         OrderEntity orderEntity = entityManager.find(OrderEntity.class, orderId);
-        if (orderEntity == null) {
-            throw new EntityNotFoundException("Order not found for id: " + orderId);
-        }
+        if (orderEntity == null)
+            throw new EntityNotFoundException("Order not found.");
+
         ProductEntity productEntity = entityManager.find(ProductEntity.class, orderItemEntity.getProduct().getId());
-        if (productEntity == null) {
-            throw new EntityNotFoundException("Product not found for id: " + orderItemEntity.getProduct().getId());
-        }
+        if (productEntity == null)
+            throw new EntityNotFoundException("Product not found.");
+
+        if (orderItemEntity.getQuantity() > productEntity.getStockQuantity())
+            throw new InsufficientStockException("Not enough stock available.");
 
         orderItemEntity.setProduct(productEntity);
         orderItemEntity.setOrder(orderEntity);

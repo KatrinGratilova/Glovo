@@ -1,9 +1,7 @@
 package org.katrin.glovo.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +15,9 @@ public class UserDto {
     private String email;
     private String phoneNumber;
     private String name;
-    private String password;
+    //private String password;
     private List<Integer> orders = new ArrayList<>();
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
-    private LocalDateTime createdAt;
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    //private LocalDateTime createdAt;
 }
 
