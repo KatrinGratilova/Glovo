@@ -33,7 +33,7 @@ public class UserService {
 
     public UserCreateDto save(UserCreateDto userDto) {
         UserEntity userEntity = UserCreateConverter.toEntity(userDto);
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+//        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         userEntity.setRoles(new HashSet<>());
         userEntity.getRoles().add(Role.ROLE_USER);
         UserEntity saved = userRepository.save(userEntity);

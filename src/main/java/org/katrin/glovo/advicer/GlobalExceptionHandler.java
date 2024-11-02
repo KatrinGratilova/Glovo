@@ -4,16 +4,26 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.katrin.glovo.exception.OrderException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    // Обробка помилок унікальності в базі даних
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        String errorMessage = ex.getMostSpecificCause().getMessage();
+        if (errorMessage.contains("products_name_country_key"))
+            return new ResponseEntity<>("A product with this name and country already exists.", HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>("Uniqueness error: " + errorMessage, HttpStatus.BAD_REQUEST);
+    }
 
     // Обробка виключень, пов'язаних з обмеженнями полів в базі даних
     @ExceptionHandler(ConstraintViolationException.class)
@@ -21,14 +31,10 @@ public class GlobalExceptionHandler {
         // Отримуємо всі повідомлення про помилки
         List<String> errorMessages = ex.getConstraintViolations()
                 .stream()
-                .map(ConstraintViolation::getMessageTemplate) // Отримуємо тільки повідомлення, яке сами створювали
+                .map(ConstraintViolation::getMessage)
                 .collect(Collectors.toList());
-
-        // Якщо тільки одне повідомлення, повертаємо його як рядок
         if (errorMessages.size() == 1)
-            return new ResponseEntity<>(errorMessages.get(0), HttpStatus.BAD_REQUEST);
-
-        // Якщо кілька, повертаємо список
+            return new ResponseEntity<>(errorMessages.getFirst(), HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
     }
 

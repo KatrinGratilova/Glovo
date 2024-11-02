@@ -15,6 +15,11 @@ import java.util.List;
 public class ProductService {
     private ProductRepository productRepository;
 
+    public ProductDto save(ProductDto productDto) {
+        ProductEntity productEntity = productRepository.save(ProductConverter.toEntity(productDto));
+        return ProductConverter.toDto(productEntity);
+    }
+
     public List<ProductDto> getAll() {
         return productRepository.findAll().stream().map(ProductConverter::toDto).toList();
     }
@@ -23,10 +28,7 @@ public class ProductService {
         return productRepository.findById(id).map(ProductConverter::toDto).orElseThrow();
     }
 
-    public ProductDto save(ProductDto productDto) {
-        ProductEntity productEntity = productRepository.save(ProductConverter.toEntity(productDto));
-        return ProductConverter.toDto(productEntity);
-    }
+
 
     public ProductDto update(ProductDto productDto) {
         ProductEntity productEntity = productRepository.save(ProductConverter.toEntity(productDto));
