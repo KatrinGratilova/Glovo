@@ -37,8 +37,8 @@ public class UserEntity {
     private String phoneNumber;
 
     @NotNull
-    @Pattern(regexp = "^[a-zA-Zа-яА-ЯёЁ\\-\\s]+$", message = "Name can contain only letters, spaces, and hyphens.")
-    @Column(nullable = false, columnDefinition = "VARCHAR CHECK (name ~ '^[a-zA-Zа-яА-ЯёЁ\\-\\s]+$')")
+    @Pattern(regexp = "^[a-zA-Z\\-\\s]+$", message = "Name can contain only letters, spaces, and hyphens.")
+    @Column(nullable = false, columnDefinition = "VARCHAR CHECK (name ~ '^[a-zA-Z\\-\\s]+$')")
     private String name;
 
 

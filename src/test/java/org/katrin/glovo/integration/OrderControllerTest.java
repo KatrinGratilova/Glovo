@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.katrin.glovo.configuration.UsersDetailsService;
 import org.katrin.glovo.dto.*;
+import org.katrin.glovo.entity.Role;
 import org.katrin.glovo.entity.UserEntity;
 import org.katrin.glovo.repository.Order.OrderRepository;
 import org.katrin.glovo.repository.User.UserRepository;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,10 +58,11 @@ class OrderControllerTest {
         userRepository.deleteAll();
         userEntity = userRepository.save(UserEntity.builder()
                 .id(1)
-                .email("test@gmail.com")
-                .name("test")
-                .phoneNumber("12345")
-                .password("123")
+                .email("gr.katrin.05@gmail.com")
+                .name("Anna-Maria")
+                .phoneNumber("+380632546866")
+                .password("Password1!") // Valid password
+                .roles(Set.of(Role.ROLE_USER))
                 .build());
 
         orderRepository.deleteAll();
