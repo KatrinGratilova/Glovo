@@ -1,10 +1,13 @@
 package org.katrin.glovo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -16,6 +19,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "users")
+
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,20 +27,25 @@ public class UserEntity {
     private int id;
 
     @NotNull
+    @Email(message = "Invalid email format.")
     @Column(nullable = false, unique = true)
     private String email;
 
     @NotNull
-
-    @Column(name = "phone_number", nullable = false, unique = true)
+    @Pattern(regexp = "^\\+\\d{1,3}\\d{10}$", message = "Phone number must be in the format +<country code><10-digit number>.")
+    @Column(name = "phone_number", nullable = false, unique = true, columnDefinition = "VARCHAR CHECK (phone_number ~ '^\\+\\d{1,3}\\d{10}$')")
     private String phoneNumber;
 
     @NotNull
-    @Column(nullable = false)
+    @Pattern(regexp = "^[a-zA-Zа-яА-ЯёЁ\\-\\s]+$", message = "Name can contain only letters, spaces, and hyphens.")
+    @Column(nullable = false, columnDefinition = "VARCHAR CHECK (name ~ '^[a-zA-Zа-яА-ЯёЁ\\-\\s]+$')")
     private String name;
 
+
     @NotNull
-    @Column(nullable = false, length = 100)
+    @Size(min = 6, max = 20, message = "Password must be between 6 and 20 characters.")
+    @Pattern(regexp = "(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{6,}", message = "Password must contain at least 1 uppercase and 1 lowercase letter, 1 symbol, and 1 digit.")
+    @Column(nullable = false, length = 100, columnDefinition = "VARCHAR CHECK (password ~ '^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{6,20}$')")
     private String password;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -51,7 +60,7 @@ public class UserEntity {
     private LocalDateTime createdAt;
 
     @PrePersist
-    public void onCreate(){
+    public void onCreate() {
         createdAt = LocalDateTime.now();
     }
 }

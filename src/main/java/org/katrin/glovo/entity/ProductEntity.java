@@ -17,14 +17,16 @@ import java.util.Optional;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "products", schema = "public")
+@Table(name = "products", schema = "public", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "country"}, name = "products_name_country_key")
+})
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id", nullable = false)
     private int id;
 
-    @NotNull
+    @NotNull(message = "Name is required.")
     @Column(nullable = false)
     private String name;
 
