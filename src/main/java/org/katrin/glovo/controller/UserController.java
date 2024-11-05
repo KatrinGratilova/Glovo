@@ -20,7 +20,7 @@ public class UserController {
     private final OrderService orderService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public List<UserDto> getAll() {
         return userService.getAll();
     }
