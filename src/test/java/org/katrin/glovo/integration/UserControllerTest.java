@@ -1,5 +1,6 @@
 package org.katrin.glovo.integration;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -87,8 +88,8 @@ public class UserControllerTest {
     }
 
     @Test
-    public void save_invalidPassword_noLetters() throws Exception {
-        userCreateDto1.setPassword("123456!"); // Invalid: no uppercase letter
+    public void save_invalidPassword_noLowerCase() throws Exception {
+        userCreateDto1.setPassword("PASSWORD1!"); // // Invalid: no uppercase letter
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(userCreateDto1)))

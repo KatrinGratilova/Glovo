@@ -74,8 +74,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void save_invalidPassword_noLetters() {
-        userCreateDto.setPassword("123456!"); // Invalid: no letters
+    public void save_invalidPassword_noLowerCase() {
+        userCreateDto.setPassword("PASSWORD1!"); // Invalid: no letters
         when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD.getMessage()));
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
         assertEquals(UserMessages.INVALID_PASSWORD.getMessage(), exception.getMessage());
