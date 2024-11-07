@@ -19,6 +19,11 @@ public class UserController {
     private final UserService userService;
     private final OrderService orderService;
 
+    @PostMapping
+    public UserCreateDto save(@RequestBody UserCreateDto userDto) {
+        return userService.save(userDto);
+    }
+
     @GetMapping
     //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public List<UserDto> getAll() {
@@ -31,10 +36,7 @@ public class UserController {
         return userService.getById(id);
     }
 
-    @PostMapping
-    public UserCreateDto save(@RequestBody UserCreateDto userDto) {
-        return userService.save(userDto);
-    }
+
 
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")

@@ -14,7 +14,7 @@ public class UserCreateConverter {
         Set<String> roles = Optional.ofNullable(user.getRoles()).orElse(new HashSet<>());
         return UserEntity.builder()
                 .id(user.getId())
-                .email(user.getEmail())
+                //.email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .name(user.getName())
                 .password(user.getPassword())
@@ -26,7 +26,7 @@ public class UserCreateConverter {
         Set<Role> roles = Optional.ofNullable(user.getRoles()).orElse(new HashSet<>());
         return UserCreateDto.builder()
                 .id(user.getId())
-                .email(user.getEmail())
+                //.email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
                 .name(user.getName())
                 .password(user.getPassword())

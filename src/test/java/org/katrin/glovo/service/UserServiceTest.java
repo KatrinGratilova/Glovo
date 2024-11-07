@@ -31,117 +31,25 @@ public class UserServiceTest {
     @BeforeEach
     void setUp() {
         userCreateDto = UserCreateDto.builder()
-                .email("gr.katrin.05@gmail.com")
+                //.email("gr.katrin.05@gmail.com")
                 .name("Anna-Maria")
                 .phoneNumber("+380632546866")
-                .password("Password1!") // Valid password
+                .password("PassworD12!#") // Valid password
                 .roles(Set.of(Role.ROLE_USER.toString()))
                 .build();
     }
 
-    // Test for valid UserCreateDto
     @Test
-    public void save_valid() {
+    public void save_ok_nameWithoutHyphen() {
+        userCreateDto.setName("Anna");
         UserEntity userEntity = UserCreateConverter.toEntity(userCreateDto);
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
         UserCreateDto actual = userService.save(userCreateDto);
         assertEquals(actual, userCreateDto);
     }
 
-    // Password Tests
     @Test
-    public void save_invalidPassword_tooShort() {
-        userCreateDto.setPassword("123"); // Invalid: too short
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD_LENGTH.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PASSWORD_LENGTH.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    public void save_invalidPassword_tooLong() {
-        userCreateDto.setPassword("VeryLongPassword123456"); // Invalid: too long
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD_LENGTH.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PASSWORD_LENGTH.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    public void save_invalidPassword_noDigits() {
-        userCreateDto.setPassword("Password!"); // Invalid: no digits
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PASSWORD.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    public void save_invalidPassword_noLowerCase() {
-        userCreateDto.setPassword("PASSWORD1!"); // Invalid: no letters
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PASSWORD.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    public void save_invalidPassword_noSpecialCharacter() {
-        userCreateDto.setPassword("Password1"); // Invalid: no special character
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PASSWORD.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    public void save_invalidPassword_noUppercase() {
-        userCreateDto.setPassword("password1!"); // Invalid: no uppercase
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PASSWORD.getMessage(), exception.getMessage());
-    }
-
-    // Phone Number Tests
-    @Test
-    public void save_invalidPhoneNumber_noPlus() {
-        userCreateDto.setPhoneNumber("380632546866"); // Invalid: no plus
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    public void save_invalidPhoneNumber_tooShort() {
-        userCreateDto.setPhoneNumber("+38063254"); // Invalid: too short
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    public void save_invalidPhoneNumber_tooLong() {
-        userCreateDto.setPhoneNumber("+380632546870000"); // Invalid: too long
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    public void save_invalidPhoneNumber_containsLetters() {
-        userCreateDto.setPhoneNumber("+38063254err"); // Invalid: too short
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
-    }
-
-    @Test
-    public void save_invalidPhoneNumber_containsSymbols() {
-        userCreateDto.setPhoneNumber("+38063254686!"); // Invalid: too long
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
-    }
-
-    // Name Tests
-    @Test
-    public void save_validName_withoutHyphen() {
-        userCreateDto.setName("Anna Maria"); // Invalid: contains digits
+    public void save_ok_nameWithHyphen() {
         UserEntity userEntity = UserCreateConverter.toEntity(userCreateDto);
         when(userRepository.save(any(UserEntity.class))).thenReturn(userEntity);
         UserCreateDto actual = userService.save(userCreateDto);
@@ -150,7 +58,7 @@ public class UserServiceTest {
 
     @Test
     public void save_invalidName_withDigits() {
-        userCreateDto.setName("Anna1-Maria"); // Invalid: contains digits
+        userCreateDto.setName("Anna1-Maria2");
         when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_NAME.getMessage()));
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
         assertEquals(UserMessages.INVALID_NAME.getMessage(), exception.getMessage());
@@ -158,34 +66,157 @@ public class UserServiceTest {
 
     @Test
     public void save_invalidName_withSymbols() {
-        userCreateDto.setName("Anna-Maria!"); // Invalid: contains special characters
+        userCreateDto.setName("Anna@-Maria!");
         when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_NAME.getMessage()));
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
         assertEquals(UserMessages.INVALID_NAME.getMessage(), exception.getMessage());
     }
 
-    // Email Tests
     @Test
-    public void save_invalidEmail_noAtSymbol() {
-        userCreateDto.setEmail("gr.katrin.05gmail.com"); // Invalid: no '@'
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_EMAIL.getMessage()));
+    public void save_invalidName_withSpaces() {
+        userCreateDto.setName("Anna  Maria");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_NAME.getMessage()));
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_EMAIL.getMessage(), exception.getMessage());
+        assertEquals(UserMessages.INVALID_NAME.getMessage(), exception.getMessage());
     }
 
     @Test
-    public void save_invalidEmail_noDomain() {
-        userCreateDto.setEmail("gr.katrin.05@"); // Invalid: no domain after '@'
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_EMAIL.getMessage()));
+    public void save_invalidName_tooShort() {
+        userCreateDto.setName("An");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_NAME_LENGTH.getMessage()));
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_EMAIL.getMessage(), exception.getMessage());
+        assertEquals(UserMessages.INVALID_NAME_LENGTH.getMessage(), exception.getMessage());
     }
 
     @Test
-    public void save_invalidEmail_noCharactersBeforeAt() {
-        userCreateDto.setEmail("@gmail.com"); // Invalid: no characters before '@'
-        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_EMAIL.getMessage()));
+    public void save_invalidName_withCyrillic() {
+        userCreateDto.setName("Катеryna");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_NAME.getMessage()));
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
-        assertEquals(UserMessages.INVALID_EMAIL.getMessage(), exception.getMessage());
+        assertEquals(UserMessages.INVALID_NAME.getMessage(), exception.getMessage());
     }
+
+    @Test
+    public void save_invalidPassword_noUppercase() {
+        userCreateDto.setPassword("password12#!");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PASSWORD.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPassword_noLowerCase() {
+        userCreateDto.setPassword("PASSWORD12#!");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PASSWORD.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPassword_noDigits() {
+        userCreateDto.setPassword("PassworD#!");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PASSWORD.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPassword_noSpecialCharacter() {
+        userCreateDto.setPassword("PassworD12");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PASSWORD.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPassword_tooShort() {
+        userCreateDto.setPassword("Ab!2");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD_LENGTH.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PASSWORD_LENGTH.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPassword_tooLong() {
+        userCreateDto.setPassword("VeryLongPassword123456#!");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PASSWORD_LENGTH.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PASSWORD_LENGTH.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPhoneNumber_noPlus() {
+        userCreateDto.setPhoneNumber("380632546866");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPhoneNumber_tooShort() {
+        userCreateDto.setPhoneNumber("+38063254");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPhoneNumber_tooLong() {
+        userCreateDto.setPhoneNumber("+380632546870000");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPhoneNumber_containsLetters() {
+        userCreateDto.setPhoneNumber("+38063254err");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPhoneNumber_containsSymbols() {
+        userCreateDto.setPhoneNumber("+38063254686@!");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
+    }
+
+    @Test
+    public void save_invalidPhoneNumber_containsSpaces() {
+        userCreateDto.setPhoneNumber("+3806325468  9");
+        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_PHONE_NUMBER.getMessage()));
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+        assertEquals(UserMessages.INVALID_PHONE_NUMBER.getMessage(), exception.getMessage());
+    }
+
+
+    
+
+//    // Email Tests
+//    @Test
+//    public void save_invalidEmail_noAtSymbol() {
+//        userCreateDto.setEmail("gr.katrin.05gmail.com"); // Invalid: no '@'
+//        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_EMAIL.getMessage()));
+//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+//        assertEquals(UserMessages.INVALID_EMAIL.getMessage(), exception.getMessage());
+//    }
+//
+//    @Test
+//    public void save_invalidEmail_noDomain() {
+//        userCreateDto.setEmail("gr.katrin.05@"); // Invalid: no domain after '@'
+//        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_EMAIL.getMessage()));
+//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+//        assertEquals(UserMessages.INVALID_EMAIL.getMessage(), exception.getMessage());
+//    }
+//
+//    @Test
+//    public void save_invalidEmail_noCharactersBeforeAt() {
+//        userCreateDto.setEmail("@gmail.com"); // Invalid: no characters before '@'
+//        when(userRepository.save(any(UserEntity.class))).thenThrow(new IllegalArgumentException(UserMessages.INVALID_EMAIL.getMessage()));
+//        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> userService.save(userCreateDto));
+//        assertEquals(UserMessages.INVALID_EMAIL.getMessage(), exception.getMessage());
+//    }
 }

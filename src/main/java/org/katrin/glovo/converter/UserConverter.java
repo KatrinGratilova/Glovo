@@ -12,7 +12,7 @@ public class UserConverter {
     public static UserDto toDto(UserEntity userEntity) {
         return UserDto.builder()
                 .id(userEntity.getId())
-                .email(userEntity.getEmail())
+                //.email(userEntity.getEmail())
                 .phoneNumber(userEntity.getPhoneNumber())
                 .name(userEntity.getName())
                 .orders(userEntity.getOrders().stream().map(OrderEntity::getId).toList())
@@ -24,7 +24,7 @@ public class UserConverter {
         List<OrderEntity> orderEntities = orderDtos.stream().map(i -> OrderEntity.builder().id(i).build()).toList();
         return UserEntity.builder()
                 .id(userDto.getId())
-                .email(userDto.getEmail())
+                //.email(userDto.getEmail())
                 .phoneNumber(userDto.getPhoneNumber())
                 .name(userDto.getName())
                 .orders(orderEntities)

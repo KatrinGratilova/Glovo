@@ -23,14 +23,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public List<UserDto> getAll() {
-        return userRepository.findAll().stream().map(UserConverter::toDto).toList();
-    }
-
-    public UserDto getById(int id) {
-        return userRepository.findById(id).map(UserConverter::toDto).orElseThrow();
-    }
-
     public UserCreateDto save(UserCreateDto userDto) {
         UserEntity userEntity = UserCreateConverter.toEntity(userDto);
 //        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
@@ -40,6 +32,16 @@ public class UserService {
 
         return UserCreateConverter.toDto(saved);
     }
+
+    public List<UserDto> getAll() {
+        return userRepository.findAll().stream().map(UserConverter::toDto).toList();
+    }
+
+    public UserDto getById(int id) {
+        return userRepository.findById(id).map(UserConverter::toDto).orElseThrow();
+    }
+
+
 
     public UserCreateDto updateWithoutOrders(UserCreateDto userDto) {
         UserEntity userEntity = userRepository.updateWithoutOrders(UserCreateConverter.toEntity(userDto));

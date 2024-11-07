@@ -22,7 +22,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
             throw new EntityNotFoundException("User not found for id: " + userModified.getId());
 
         userEntity.setName(userModified.getName());
-        userEntity.setEmail(userModified.getEmail());
+        //userEntity.setEmail(userModified.getEmail());
         userEntity.setPhoneNumber(userModified.getPhoneNumber());
         userEntity.setPassword(userModified.getPassword());
 

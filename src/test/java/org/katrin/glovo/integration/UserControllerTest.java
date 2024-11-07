@@ -41,65 +41,83 @@ public class UserControllerTest {
     public void init() {
         userRepository.deleteAll();
         userCreateDto1 = UserCreateDto.builder()
-                .email("gr.katrin.05@gmail.com")
+                //.email("gr.katrin.05@gmail.com")
                 .name("Anna-Maria")
                 .phoneNumber("+380632546866")
-                .password("Password1!") // Valid password
+                .password("PassworD12!#") // Valid password
                 .roles(Set.of(Role.ROLE_USER.toString()))
                 .build();
     }
 
     @Test
-    public void save_valid() throws Exception {
+    public void save_ok_nameWithoutHyphen() throws Exception {
+        userCreateDto1.setName("Anna"); // Invalid: contains digits
         mockMvc.perform(post("/users") // Замените на ваш URL для создания пользователя
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(userCreateDto1)))
+                .andExpect(status().isOk());
+    }
+    @Test
+    public void save_ok_withoutHyphen() throws Exception {
+        mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(userCreateDto1)))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void save_invalidPassword_tooShort() throws Exception {
-        userCreateDto1.setPassword("123"); // Invalid: too short
+    public void save_invalidName_withDigits() throws Exception {
+        userCreateDto1.setName("Anna1-Maria2"); // Invalid: contains digits
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(userCreateDto1)))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PASSWORD_LENGTH.getMessage())));
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_NAME.getMessage())));
     }
 
     @Test
-    public void save_invalidPassword_tooLong() throws Exception {
-        userCreateDto1.setPassword("VeryLongPassword123456"); // Invalid: too long
+    public void save_invalidName_withSymbols() throws Exception {
+        userCreateDto1.setName("Anna@-Maria!"); // Invalid: contains digits
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(userCreateDto1)))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PASSWORD_LENGTH.getMessage())));
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_NAME.getMessage())));
     }
 
     @Test
-    public void save_invalidPassword_noDigits() throws Exception {
-        userCreateDto1.setPassword("Password!"); // Invalid: no uppercase letter
+    public void save_invalidName_withSpaces() throws Exception {
+        userCreateDto1.setName("Anna  Maria"); // Invalid: contains digits
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(userCreateDto1)))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PASSWORD.getMessage())));
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_NAME.getMessage())));
+    }
+
+    @Test
+    public void save_invalidName_tooShort() throws Exception {
+        userCreateDto1.setName("An"); // Invalid: contains digits
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(userCreateDto1)))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_NAME_LENGTH.getMessage())));
+    }
+
+    @Test
+    public void save_invalidName_withCyrillic() throws Exception {
+        userCreateDto1.setName("Катеryna"); // Invalid: contains digits
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(userCreateDto1)))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_NAME.getMessage())));
     }
 
     @Test
     public void save_invalidPassword_noLowerCase() throws Exception {
-        userCreateDto1.setPassword("PASSWORD1!"); // // Invalid: no uppercase letter
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(userCreateDto1)))
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PASSWORD.getMessage())));
-    }
-
-    @Test
-    public void save_invalidPassword_noSpecialCharacter() throws Exception {
-        userCreateDto1.setPassword("Password1"); // Invalid: no special character
+        userCreateDto1.setPassword("PASSWORD12#!"); // // Invalid: no uppercase letter
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(userCreateDto1)))
@@ -109,13 +127,55 @@ public class UserControllerTest {
 
     @Test
     public void save_invalidPassword_noUppercase() throws Exception {
-        userCreateDto1.setPassword("password1!"); // Invalid: no special character
+        userCreateDto1.setPassword("password12#!"); // Invalid: no special character
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(userCreateDto1)))
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PASSWORD.getMessage())));
     }
+
+    @Test
+    public void save_invalidPassword_noDigits() throws Exception {
+        userCreateDto1.setPassword("PassworD#!"); // Invalid: no uppercase letter
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(userCreateDto1)))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PASSWORD.getMessage())));
+    }
+
+
+    @Test
+    public void save_invalidPassword_noSpecialCharacter() throws Exception {
+        userCreateDto1.setPassword("PassworD12"); // Invalid: no special character
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(userCreateDto1)))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PASSWORD.getMessage())));
+    }
+
+    @Test
+    public void save_invalidPassword_tooShort() throws Exception {
+        userCreateDto1.setPassword("Ab!2"); // Invalid: too short
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(userCreateDto1)))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PASSWORD_LENGTH.getMessage())));
+    }
+
+    @Test
+    public void save_invalidPassword_tooLong() throws Exception {
+        userCreateDto1.setPassword("VeryLongPassword123456#!"); // Invalid: too long
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(userCreateDto1)))
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PASSWORD_LENGTH.getMessage())));
+    }
+
 
 
     @Test
@@ -130,7 +190,7 @@ public class UserControllerTest {
 
     @Test
     public void save_invalidPhoneNumber_containsLetters() throws Exception {
-        userCreateDto1.setPhoneNumber("+38063254abc"); // Invalid: contains letters
+        userCreateDto1.setPhoneNumber("+38063254err"); // Invalid: contains letters
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(userCreateDto1)))
@@ -140,7 +200,7 @@ public class UserControllerTest {
 
     @Test
     public void save_invalidPhoneNumber_containsSymbols() throws Exception {
-        userCreateDto1.setPhoneNumber("+38063254689!"); // Invalid: contains letters
+        userCreateDto1.setPhoneNumber("+38063254686@!"); // Invalid: contains letters
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(userCreateDto1)))
@@ -168,64 +228,44 @@ public class UserControllerTest {
                 .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PHONE_NUMBER.getMessage())));
     }
 
-
     @Test
-    public void save_validName_withoutHyphen() throws Exception {
-        userCreateDto1.setName("Anna Maria"); // Invalid: contains digits
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(userCreateDto1)))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void save_invalidName_withDigits() throws Exception {
-        userCreateDto1.setName("Anna1-Maria"); // Invalid: contains digits
+    public void save_invalidPhoneNumber_containsSpaces() throws Exception {
+        userCreateDto1.setPhoneNumber("+3806325468  9"); // Invalid: contains letters
         mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(userCreateDto1)))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_NAME.getMessage())));
-    }
-
-    @Test
-    public void save_invalidName_withSymbols() throws Exception {
-        userCreateDto1.setName("Anna-Maria!"); // Invalid: contains digits
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(userCreateDto1)))
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_NAME.getMessage())));
+                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_PHONE_NUMBER.getMessage())));
     }
 
 
-    @Test
-    public void save_invalidEmail_noAtSymbol() throws Exception {
-        userCreateDto1.setEmail("gr.katrin.05gmail.com"); // Invalid: no '@'
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(userCreateDto1)))
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_EMAIL.getMessage())));
-    }
-
-    @Test
-    public void save_invalidEmail_noDomain() throws Exception {
-        userCreateDto1.setEmail("gr.katrin.05gmail.com"); // Invalid: no '@'
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(userCreateDto1)))
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_EMAIL.getMessage())));
-    }
-
-    @Test
-    public void save_invalidEmail_noCharactersBeforeAt() throws Exception {
-        userCreateDto1.setEmail("gr.katrin.05gmail.com"); // Invalid: no '@'
-        mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(userCreateDto1)))
-                .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_EMAIL.getMessage())));
-    }
+//    @Test
+//    public void save_invalidEmail_noAtSymbol() throws Exception {
+//        userCreateDto1.setEmail("gr.katrin.05gmail.com"); // Invalid: no '@'
+//        mockMvc.perform(post("/users")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(mapper.writeValueAsString(userCreateDto1)))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_EMAIL.getMessage())));
+//    }
+//
+//    @Test
+//    public void save_invalidEmail_noDomain() throws Exception {
+//        userCreateDto1.setEmail("gr.katrin.05gmail.com"); // Invalid: no '@'
+//        mockMvc.perform(post("/users")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(mapper.writeValueAsString(userCreateDto1)))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_EMAIL.getMessage())));
+//    }
+//
+//    @Test
+//    public void save_invalidEmail_noCharactersBeforeAt() throws Exception {
+//        userCreateDto1.setEmail("gr.katrin.05gmail.com"); // Invalid: no '@'
+//        mockMvc.perform(post("/users")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(mapper.writeValueAsString(userCreateDto1)))
+//                .andExpect(status().isBadRequest())
+//                .andExpect(result -> assertTrue(result.getResolvedException().getMessage().contains(UserMessages.INVALID_EMAIL.getMessage())));
+//    }
 }

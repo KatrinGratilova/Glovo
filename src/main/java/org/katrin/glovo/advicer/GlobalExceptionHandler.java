@@ -16,14 +16,14 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     // Обробка помилок унікальності в базі даних
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        String errorMessage = ex.getMostSpecificCause().getMessage();
-        if (errorMessage.contains("products_name_country_key"))
-            return new ResponseEntity<>("A product with this name and country already exists.", HttpStatus.BAD_REQUEST);
-        else
-            return new ResponseEntity<>("Uniqueness error: " + errorMessage, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(DataIntegrityViolationException.class)
+//    public ResponseEntity<?> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+//        String errorMessage = ex.getMostSpecificCause().getMessage();
+//        if (errorMessage.contains("products_name_country_key"))
+//            return new ResponseEntity<>("A product with this name and country already exists.", HttpStatus.BAD_REQUEST);
+//        else
+//            return new ResponseEntity<>("Uniqueness error: " + errorMessage, HttpStatus.BAD_REQUEST);
+//    }
 
     // Обробка виключень, пов'язаних з обмеженнями полів в базі даних
     @ExceptionHandler(ConstraintViolationException.class)
@@ -38,15 +38,15 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorMessages, HttpStatus.BAD_REQUEST);
     }
 
-    // Обробка виключень, пов'язаних з замовленнями
-    @ExceptionHandler(OrderException.class)
-    public ResponseEntity<?> handleProductException(OrderException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    // Обробка виключень, пов'язаних з не існуванням запису в базі даних
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
-    }
+//    // Обробка виключень, пов'язаних з замовленнями
+//    @ExceptionHandler(OrderException.class)
+//    public ResponseEntity<?> handleProductException(OrderException ex) {
+//        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+//    }
+//
+//    // Обробка виключень, пов'язаних з не існуванням запису в базі даних
+//    @ExceptionHandler(EntityNotFoundException.class)
+//    public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException ex) {
+//        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+   // }
 }

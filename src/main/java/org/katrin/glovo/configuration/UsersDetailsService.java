@@ -22,7 +22,7 @@ public class UsersDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity employee = userRepository.findByEmail(username);
+        UserEntity employee = userRepository.findByName(username);
 
         Set<GrantedAuthority> authorities = employee.getRoles().stream()
                 .map((roles) -> new SimpleGrantedAuthority(roles.toString()))

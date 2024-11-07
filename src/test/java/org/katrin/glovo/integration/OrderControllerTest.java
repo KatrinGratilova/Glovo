@@ -58,7 +58,7 @@ class OrderControllerTest {
         userRepository.deleteAll();
         userEntity = userRepository.save(UserEntity.builder()
                 .id(1)
-                .email("gr.katrin.05@gmail.com")
+                //.email("gr.katrin.05@gmail.com")
                 .name("Anna-Maria")
                 .phoneNumber("+380632546866")
                 .password("Password1!") // Valid password
